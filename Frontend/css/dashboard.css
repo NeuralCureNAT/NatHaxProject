@@ -1,0 +1,203 @@
+/* ============================================
+   Dashboard Styles
+   ============================================ */
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-xl);
+}
+
+.dashboard-card {
+    background: var(--bg-cream);
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    border: 1px solid rgba(26, 31, 58, 0.1);
+    transition: var(--transition-base);
+}
+
+.dashboard-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--accent-yellow);
+}
+
+.dashboard-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: var(--spacing-md);
+    color: var(--primary-dark);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+/* Focus Meter */
+.meter-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--spacing-lg);
+}
+
+.meter-circle {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: conic-gradient(
+        var(--accent-yellow) 0% 78%,
+        var(--bg-light-beige) 78% 100%
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: var(--shadow-lg);
+}
+
+.meter-circle::before {
+    content: '';
+    width: 160px;
+    height: 160px;
+    background: var(--bg-cream);
+    border-radius: 50%;
+    position: absolute;
+}
+
+.meter-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--primary-dark);
+    z-index: var(--z-base);
+}
+
+.meter-label {
+    position: absolute;
+    bottom: -30px;
+    font-size: 0.9rem;
+    color: var(--text-gray);
+    z-index: var(--z-base);
+}
+
+/* Stat Rows */
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--spacing-sm) 0;
+    border-bottom: 1px solid rgba(26, 31, 58, 0.1);
+}
+
+.stat-row:last-child {
+    border-bottom: none;
+}
+
+.stat-row span {
+    color: var(--text-gray);
+}
+
+.stat-row strong {
+    color: var(--primary-dark);
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+/* Environment Metrics */
+.env-metric {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--spacing-sm) 0;
+    border-bottom: 1px solid rgba(26, 31, 58, 0.1);
+}
+
+.env-metric:last-child {
+    border-bottom: none;
+}
+
+.env-metric span {
+    color: var(--text-gray);
+}
+
+.env-metric strong {
+    color: var(--success);
+    font-weight: 600;
+}
+
+/* Recommendations List */
+.recommendations-list {
+    list-style: none;
+}
+
+.recommendations-list li {
+    padding: var(--spacing-sm) 0;
+    color: var(--text-gray);
+    border-bottom: 1px solid rgba(26, 31, 58, 0.1);
+    line-height: 1.6;
+}
+
+.recommendations-list li:last-child {
+    border-bottom: none;
+}
+
+/* Process Steps */
+.process-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-xl);
+}
+
+.step {
+    text-align: center;
+    position: relative;
+}
+
+.step-number {
+    width: 80px;
+    height: 80px;
+    background: var(--gradient-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 800;
+    color: white;
+    margin: 0 auto var(--spacing-md);
+    box-shadow: var(--shadow-lg);
+    position: relative;
+}
+
+.step-number::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: var(--accent-yellow);
+    opacity: 0.3;
+    z-index: -1;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.step h3 {
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-sm);
+    color: var(--primary-dark);
+}
+
+.step p {
+    color: var(--text-gray);
+    line-height: 1.7;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.3;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.5;
+    }
+}
+
