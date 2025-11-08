@@ -1,0 +1,331 @@
+/* ============================================
+   Onboarding Flow Styles
+   Inspired by Ali Abdaal's clean, friendly design
+   ============================================ */
+
+.onboarding-page {
+    background: var(--bg-beige);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+/* Progress Bar */
+.progress-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--bg-light-beige);
+    z-index: var(--z-sticky);
+}
+
+.progress-bar {
+    height: 100%;
+    background: var(--gradient-accent);
+    width: 0%;
+    transition: width 0.3s ease;
+    box-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
+}
+
+/* Onboarding Container */
+.onboarding-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-2xl) var(--spacing-lg);
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Step Content */
+.onboarding-step {
+    display: none;
+    width: 100%;
+    animation: fadeIn 0.5s ease;
+}
+
+.onboarding-step.active {
+    display: block;
+}
+
+.step-content {
+    text-align: center;
+    padding: var(--spacing-xl) 0;
+}
+
+.step-icon {
+    font-size: 4rem;
+    margin-bottom: var(--spacing-lg);
+    animation: bounceIn 0.6s ease;
+}
+
+@keyframes bounceIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.step-content h1,
+.step-content h2 {
+    font-size: clamp(2rem, 4vw, 2.5rem);
+    margin-bottom: var(--spacing-md);
+    color: var(--primary-dark);
+}
+
+.step-subtitle {
+    font-size: 1.2rem;
+    color: var(--text-gray);
+    margin-bottom: var(--spacing-lg);
+}
+
+.step-description {
+    font-size: 1.1rem;
+    color: var(--text-gray);
+    line-height: 1.7;
+    margin-bottom: var(--spacing-xl);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Options Grid */
+.options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.options-grid.multi-select {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.option-card {
+    background: var(--bg-cream);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-lg);
+    cursor: pointer;
+    transition: var(--transition-base);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
+    min-height: 140px;
+    justify-content: center;
+    user-select: none;
+    -webkit-user-select: none;
+    pointer-events: auto;
+}
+
+.option-card * {
+    pointer-events: none;
+}
+
+.option-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--accent-yellow);
+}
+
+.option-card.selected {
+    background: var(--gradient-primary);
+    color: white;
+    border-color: var(--accent-yellow);
+    box-shadow: var(--shadow-glow);
+}
+
+.option-card.selected .option-icon,
+.option-card.selected .option-title,
+.option-card.selected .option-desc {
+    color: white;
+}
+
+.option-icon {
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-xs);
+}
+
+.option-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin-bottom: var(--spacing-xs);
+}
+
+.option-desc {
+    font-size: 0.9rem;
+    color: var(--text-gray);
+    line-height: 1.5;
+}
+
+.option-card.selected .option-desc {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Multi-select cards */
+.option-card.selectable {
+    position: relative;
+}
+
+.option-card.selectable.selected::after {
+    content: '✓';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 24px;
+    height: 24px;
+    background: var(--accent-yellow);
+    color: var(--text-dark);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+/* Buttons */
+.btn-large {
+    padding: var(--spacing-md) var(--spacing-xl);
+    font-size: 1.1rem;
+    min-width: 200px;
+}
+
+.skip-text {
+    margin-top: var(--spacing-lg);
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+.skip-link {
+    color: var(--primary-blue);
+    text-decoration: underline;
+    transition: var(--transition-base);
+}
+
+.skip-link:hover {
+    color: var(--accent-yellow);
+}
+
+/* Step Navigation */
+.step-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: var(--spacing-xl);
+    gap: var(--spacing-md);
+}
+
+.step-nav .btn {
+    flex: 1;
+    max-width: 200px;
+}
+
+/* Summary Card */
+.summary-card {
+    background: var(--bg-cream);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    margin: var(--spacing-xl) 0;
+    text-align: left;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.summary-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: var(--spacing-md);
+    color: var(--primary-dark);
+    text-align: center;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--spacing-sm) 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.summary-item:last-child {
+    border-bottom: none;
+}
+
+.summary-label {
+    color: var(--text-gray);
+    font-weight: 500;
+}
+
+.summary-value {
+    color: var(--primary-dark);
+    font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .onboarding-container {
+        padding: var(--spacing-lg) var(--spacing-md);
+    }
+
+    .options-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-sm);
+    }
+
+    .options-grid.multi-select {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .option-card {
+        min-height: 120px;
+        padding: var(--spacing-md);
+    }
+
+    .option-icon {
+        font-size: 2rem;
+    }
+
+    .step-nav {
+        flex-direction: column;
+    }
+
+    .step-nav .btn {
+        width: 100%;
+        max-width: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .options-grid.multi-select {
+        grid-template-columns: 1fr;
+    }
+
+    .step-icon {
+        font-size: 3rem;
+    }
+
+    .step-content h1,
+    .step-content h2 {
+        font-size: 1.75rem;
+    }
+}
+

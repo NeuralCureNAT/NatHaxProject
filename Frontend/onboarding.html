@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to MigroMinder | Let's Get Started</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/onboarding.css">
+</head>
+<body class="onboarding-page">
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Onboarding Container -->
+    <div class="onboarding-container">
+        <!-- Step 1: Welcome -->
+        <div class="onboarding-step active" id="step1" data-step="1">
+            <div class="step-content">
+                <div class="step-icon">🧠</div>
+                <h1>Hey there! 👋</h1>
+                <p class="step-subtitle">Welcome to <strong>MigroMinder</strong></p>
+                <p class="step-description">
+                    We're here to help you manage migraines by listening to your brainwaves. 
+                    Let's personalize your experience with a few quick questions.
+                </p>
+                <button class="btn btn-primary btn-large" onclick="nextStep()">
+                    Let's Get Started
+                </button>
+                <p class="skip-text">
+                    <a href="index.html" class="skip-link">Skip for now</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Step 2: Frequency -->
+        <div class="onboarding-step" id="step2" data-step="2">
+            <div class="step-content">
+                <div class="step-icon">📅</div>
+                <h2>How often do you experience migraines?</h2>
+                <p class="step-description">This helps us understand your pattern</p>
+                <div class="options-grid">
+                    <button class="option-card" onclick="selectOption('frequency', 'daily')">
+                        <div class="option-icon">😣</div>
+                        <div class="option-title">Daily</div>
+                        <div class="option-desc">Multiple times per week</div>
+                    </button>
+                    <button class="option-card" onclick="selectOption('frequency', 'weekly')">
+                        <div class="option-icon">😕</div>
+                        <div class="option-title">Weekly</div>
+                        <div class="option-desc">1-3 times per week</div>
+                    </button>
+                    <button class="option-card" onclick="selectOption('frequency', 'monthly')">
+                        <div class="option-icon">😐</div>
+                        <div class="option-title">Monthly</div>
+                        <div class="option-desc">A few times per month</div>
+                    </button>
+                    <button class="option-card" onclick="selectOption('frequency', 'occasional')">
+                        <div class="option-icon">🙂</div>
+                        <div class="option-title">Occasional</div>
+                        <div class="option-desc">Rarely, but want to prevent</div>
+                    </button>
+                </div>
+                <div class="step-nav">
+                    <button class="btn btn-outline" onclick="prevStep()">Back</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Severity -->
+        <div class="onboarding-step" id="step3" data-step="3">
+            <div class="step-content">
+                <div class="step-icon">⚡</div>
+                <h2>How severe are your migraines typically?</h2>
+                <p class="step-description">Help us understand the impact on your daily life</p>
+                <div class="options-grid">
+                    <button class="option-card" onclick="selectOption('severity', 'mild')">
+                        <div class="option-icon">🟢</div>
+                        <div class="option-title">Mild</div>
+                        <div class="option-desc">Manageable, can continue activities</div>
+                    </button>
+                    <button class="option-card" onclick="selectOption('severity', 'moderate')">
+                        <div class="option-icon">🟡</div>
+                        <div class="option-title">Moderate</div>
+                        <div class="option-desc">Disrupts daily activities</div>
+                    </button>
+                    <button class="option-card" onclick="selectOption('severity', 'severe')">
+                        <div class="option-icon">🟠</div>
+                        <div class="option-title">Severe</div>
+                        <div class="option-desc">Significantly impacts daily life</div>
+                    </button>
+                    <button class="option-card" onclick="selectOption('severity', 'debilitating')">
+                        <div class="option-icon">🔴</div>
+                        <div class="option-title">Debilitating</div>
+                        <div class="option-desc">Unable to function normally</div>
+                    </button>
+                </div>
+                <div class="step-nav">
+                    <button class="btn btn-outline" onclick="prevStep()">Back</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4: Triggers -->
+        <div class="onboarding-step" id="step4" data-step="4">
+            <div class="step-content">
+                <div class="step-icon">🔍</div>
+                <h2>What are your main triggers?</h2>
+                <p class="step-description">Select all that apply (you can add more later)</p>
+                <div class="options-grid multi-select" id="triggersGrid">
+                    <button type="button" class="option-card selectable" data-trigger="stress">
+                        <div class="option-icon">😰</div>
+                        <div class="option-title">Stress</div>
+                    </button>
+                    <button type="button" class="option-card selectable" data-trigger="light">
+                        <div class="option-icon">💡</div>
+                        <div class="option-title">Bright Light</div>
+                    </button>
+                    <button type="button" class="option-card selectable" data-trigger="screen">
+                        <div class="option-icon">💻</div>
+                        <div class="option-title">Screen Time</div>
+                    </button>
+                    <button type="button" class="option-card selectable" data-trigger="noise">
+                        <div class="option-icon">🔊</div>
+                        <div class="option-title">Noise</div>
+                    </button>
+                    <button type="button" class="option-card selectable" data-trigger="caffeine">
+                        <div class="option-icon">☕</div>
+                        <div class="option-title">Caffeine</div>
+                    </button>
+                    <button type="button" class="option-card selectable" data-trigger="sleep">
+                        <div class="option-icon">😴</div>
+                        <div class="option-title">Sleep Issues</div>
+                    </button>
+                    <button type="button" class="option-card selectable" data-trigger="weather">
+                        <div class="option-icon">🌦️</div>
+                        <div class="option-title">Weather</div>
+                    </button>
+                    <button type="button" class="option-card selectable" data-trigger="hormonal">
+                        <div class="option-icon">🔄</div>
+                        <div class="option-title">Hormonal</div>
+                    </button>
+                </div>
+                <div class="step-nav">
+                    <button class="btn btn-outline" onclick="prevStep()">Back</button>
+                    <button class="btn btn-primary" onclick="nextStep()" id="step4Next" disabled>
+                        Continue
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 5: Goals -->
+        <div class="onboarding-step" id="step5" data-step="5">
+            <div class="step-content">
+                <div class="step-icon">🎯</div>
+                <h2>What are you hoping to achieve?</h2>
+                <p class="step-description">What's your main goal with MigroMinder?</p>
+                <div class="options-grid">
+                    <button class="option-card" onclick="selectOption('goal', 'prevent')">
+                        <div class="option-icon">🛡️</div>
+                        <div class="option-title">Prevent Episodes</div>
+                        <div class="option-desc">Catch migraines before they start</div>
+                    </button>
+                    <button class="option-card" onclick="selectOption('goal', 'reduce')">
+                        <div class="option-icon">📉</div>
+                        <div class="option-title">Reduce Frequency</div>
+                        <div class="option-desc">Have fewer migraine days</div>
+                    </button>
+                    <button class="option-card" onclick="selectOption('goal', 'manage')">
+                        <div class="option-icon">⚖️</div>
+                        <div class="option-title">Better Management</div>
+                        <div class="option-desc">Understand my patterns better</div>
+                    </button>
+                    <button class="option-card" onclick="selectOption('goal', 'work')">
+                        <div class="option-icon">💼</div>
+                        <div class="option-title">Stay Productive</div>
+                        <div class="option-desc">Continue working during episodes</div>
+                    </button>
+                </div>
+                <div class="step-nav">
+                    <button class="btn btn-outline" onclick="prevStep()">Back</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 6: Hardware -->
+        <div class="onboarding-step" id="step6" data-step="6">
+            <div class="step-content">
+                <div class="step-icon">🔧</div>
+                <h2>Do you have a Muse 2 headband?</h2>
+                <p class="step-description">MigroMinder works best with real-time EEG data</p>
+                <div class="options-grid">
+                    <button class="option-card" onclick="selectOption('hardware', 'yes')">
+                        <div class="option-icon">✅</div>
+                        <div class="option-title">Yes, I have one</div>
+                        <div class="option-desc">Ready to connect</div>
+                    </button>
+                    <button class="option-card" onclick="selectOption('hardware', 'no')">
+                        <div class="option-icon">❌</div>
+                        <div class="option-title">Not yet</div>
+                        <div class="option-desc">I'll use demo mode for now</div>
+                    </button>
+                    <button class="option-card" onclick="selectOption('hardware', 'planning')">
+                        <div class="option-icon">🛒</div>
+                        <div class="option-title">Planning to get one</div>
+                        <div class="option-desc">I'll set it up later</div>
+                    </button>
+                </div>
+                <div class="step-nav">
+                    <button class="btn btn-outline" onclick="prevStep()">Back</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 7: Complete -->
+        <div class="onboarding-step" id="step7" data-step="7">
+            <div class="step-content">
+                <div class="step-icon">🎉</div>
+                <h2>You're all set!</h2>
+                <p class="step-description">
+                    We've personalized MigroMinder based on your responses. 
+                    You can always update these settings later.
+                </p>
+                <div class="summary-card">
+                    <h3>Your Profile Summary</h3>
+                    <div class="summary-item">
+                        <span class="summary-label">Frequency:</span>
+                        <span class="summary-value" id="summaryFrequency">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Severity:</span>
+                        <span class="summary-value" id="summarySeverity">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Main Goal:</span>
+                        <span class="summary-value" id="summaryGoal">-</span>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-large" onclick="completeOnboarding()">
+                    Start Using MigroMinder
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/onboarding.js"></script>
+</body>
+</html>
+

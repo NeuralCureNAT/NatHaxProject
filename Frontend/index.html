@@ -3,326 +3,351 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeuralCare | Enhance Your Focus & Productivity</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta name="description" content="MigroMinder - Intelligent migraine management using EEG signals and environmental control">
+    <title>MigroMinder | Easing the mind, one light at a time</title>
+    <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
+    <!-- Check if onboarding is needed -->
+    <script>
+        // Redirect to onboarding if not completed
+        if (!localStorage.getItem('migrominder_onboarding_complete')) {
+            window.location.href = 'onboarding.html';
+        }
+    </script>
+
+    <!-- Navigation -->
     <header>
         <nav class="navbar">
-            <div class="nav-container">
+            <div class="container nav-container">
                 <div class="logo">
-                    <h1>Neural<span class="logo-accent">Care</span></h1>
+                    <div class="logo-icon">
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                            <!-- Head outline -->
+                            <path d="M20 8 C15 8 10 12 10 18 C10 24 15 28 20 28 C25 28 30 24 30 18 C30 12 25 8 20 8 Z" 
+                                  stroke="#1A1F3A" stroke-width="2" fill="none"/>
+                            <!-- Lightbulb -->
+                            <circle cx="20" cy="18" r="6" fill="#FFC107"/>
+                            <path d="M 20 12 L 20 10 M 20 24 L 20 26 M 14 18 L 12 18 M 26 18 L 28 18" 
+                                  stroke="#FFC107" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <span class="logo-text">MigroMinder</span>
                 </div>
                 <ul class="nav-menu">
                     <li><a href="#home">Home</a></li>
                     <li><a href="#features">Features</a></li>
                     <li><a href="#how-it-works">How It Works</a></li>
                     <li><a href="#dashboard">Dashboard</a></li>
+                    <li><a href="#about">About</a></li>
                 </ul>
+                <button class="menu-toggle" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
         </nav>
     </header>
 
-    <main>
-        <section id="home" class="hero">
-            <div class="hero-content">
-                <div class="hero-badge">🧠 EEG-Powered Productivity</div>
-                <h2>Amplify Your Focus with <span class="gradient-text">Neural Intelligence</span></h2>
-                <p>Real-time EEG monitoring and adaptive insights to optimize your study sessions and boost concentration levels</p>
-                <div class="hero-buttons">
-                    <button class="cta-button primary">Start Session</button>
-                    <button class="cta-button secondary">View Dashboard</button>
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">🧠 EEG-Powered Migraine Management</div>
+            <h1>Easing the mind, <span class="hero-accent">one light at a time</span></h1>
+            <p>MigroMinder detects early migraine patterns from your brainwaves and automatically adjusts your environment. When your brain signals trouble, we dim the lights before the pain hits.</p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary">Start Monitoring</button>
+                <button class="btn btn-secondary">View Dashboard</button>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-card">
+                    <div class="stat-value">92%</div>
+                    <div class="stat-label">Detection Accuracy</div>
                 </div>
-                <div class="hero-stats">
-                    <div class="stat">
-                        <div class="stat-value">95%</div>
-                        <div class="stat-label">Focus Accuracy</div>
+                <div class="stat-card">
+                    <div class="stat-value">3.2s</div>
+                    <div class="stat-label">Avg Response Time</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">24/7</div>
+                    <div class="stat-label">Real-time Monitoring</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Powerful Features</h2>
+                <p>Advanced neurotechnology meets intelligent environmental control</p>
+            </div>
+            <div class="grid grid-3 cards">
+                <div class="card feature-card">
+                    <div class="card-icon">🧠</div>
+                    <h3>EEG Pattern Detection</h3>
+                    <p>Real-time analysis of Muse 2 EEG signals to identify early neurological signatures of migraine onset. Detects stress, focus drops, and HRV changes before symptoms appear.</p>
+                    <div class="feature-illustration">
+                        <svg viewBox="0 0 200 150" class="illustration-svg">
+                            <!-- Anime figure with EEG headband -->
+                            <circle cx="100" cy="50" r="22" fill="#FFDBAC"/>
+                            <path d="M 78 40 Q 70 30 75 25 Q 85 20 100 23 Q 115 20 125 25 Q 130 30 122 40" fill="#4A3728"/>
+                            <!-- EEG headband -->
+                            <ellipse cx="100" cy="50" rx="30" ry="20" fill="none" stroke="#1A1F3A" stroke-width="3"/>
+                            <circle cx="85" cy="45" r="3" fill="#FFC107"/>
+                            <circle cx="100" cy="45" r="3" fill="#FFC107"/>
+                            <circle cx="115" cy="45" r="3" fill="#FFC107"/>
+                            <!-- Brain waves -->
+                            <path d="M 60 70 Q 70 60 80 70 Q 90 80 100 70 Q 110 60 120 70 Q 130 80 140 70" 
+                                  stroke="#FFC107" stroke-width="2" fill="none"/>
+                            <rect x="88" y="72" width="24" height="35" rx="8" fill="#1A1F3A"/>
+                        </svg>
                     </div>
-                    <div class="stat">
-                        <div class="stat-value">40%</div>
-                        <div class="stat-label">Productivity Boost</div>
+                </div>
+
+                <div class="card feature-card">
+                    <div class="card-icon">💡</div>
+                    <h3>Automatic Light Control</h3>
+                    <p>Arduino-controlled LED module automatically dims ambient lighting or prompts screen brightness reduction when migraine patterns are detected. Reacts faster than you can.</p>
+                    <div class="feature-illustration">
+                        <svg viewBox="0 0 200 150" class="illustration-svg">
+                            <!-- Lightbulb -->
+                            <circle cx="100" cy="60" r="25" fill="#FFC107" opacity="0.9"/>
+                            <rect x="95" y="85" width="10" height="15" fill="#1A1F3A"/>
+                            <!-- Light rays -->
+                            <path d="M 100 35 L 85 50 M 100 35 L 115 50 M 75 60 L 90 70 M 125 60 L 110 70" 
+                                  stroke="#FFC107" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+                            <!-- Dimmed background -->
+                            <rect x="40" y="100" width="120" height="8" fill="#4A5568" opacity="0.5"/>
+                        </svg>
                     </div>
-                    <div class="stat">
-                        <div class="stat-value">24/7</div>
-                        <div class="stat-label">Real-time Monitoring</div>
+                </div>
+
+                <div class="card feature-card">
+                    <div class="card-icon">📊</div>
+                    <h3>Trigger Logging & Analytics</h3>
+                    <p>Log contextual causes—stress, noise, caffeine, weather, coursework. Visualize EEG trends, trigger frequency, and environment correlations to identify patterns.</p>
+                    <div class="feature-illustration">
+                        <svg viewBox="0 0 200 150" class="illustration-svg">
+                            <!-- Chart/graph -->
+                            <path d="M 40 120 L 60 100 L 80 110 L 100 80 L 120 90 L 140 70 L 160 75" 
+                                  stroke="#1A1F3A" stroke-width="3" fill="none" stroke-linecap="round"/>
+                            <circle cx="100" cy="80" r="5" fill="#FFC107"/>
+                            <!-- Data points -->
+                            <circle cx="60" cy="100" r="4" fill="#FFC107"/>
+                            <circle cx="140" cy="70" r="4" fill="#FFC107"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="card feature-card">
+                    <div class="card-icon">🌡️</div>
+                    <h3>Environment Monitoring</h3>
+                    <p>DHT11 sensor tracks temperature and humidity. LDR monitors ambient light. Correlates environmental factors with migraine episodes to identify triggers.</p>
+                    <div class="feature-illustration">
+                        <svg viewBox="0 0 200 150" class="illustration-svg">
+                            <!-- Temperature/humidity display -->
+                            <rect x="80" y="60" width="40" height="50" rx="5" fill="#1A1F3A"/>
+                            <text x="100" y="85" font-size="16" fill="#FFC107" text-anchor="middle" font-weight="bold">22°C</text>
+                            <text x="100" y="100" font-size="12" fill="#FFC107" text-anchor="middle">65%</text>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="card feature-card">
+                    <div class="card-icon">📱</div>
+                    <h3>Interactive Dashboard</h3>
+                    <p>Flask/React.js dashboard for real-time monitoring, event logging, and data visualization. Clean interface that looks great even at 20% brightness.</p>
+                    <div class="feature-illustration">
+                        <svg viewBox="0 0 200 150" class="illustration-svg">
+                            <!-- Dashboard mockup -->
+                            <rect x="50" y="50" width="100" height="60" rx="5" fill="#1A1F3A"/>
+                            <rect x="60" y="60" width="30" height="15" rx="2" fill="#FFC107"/>
+                            <rect x="95" y="60" width="30" height="15" rx="2" fill="#FFC107"/>
+                            <rect x="60" y="80" width="65" height="20" rx="2" fill="#2C3E6F"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="card feature-card">
+                    <div class="card-icon">🤖</div>
+                    <h3>Personalized Learning</h3>
+                    <p>Machine learning algorithms learn which conditions precede your migraines. Over time, MigroMinder becomes more accurate and personalized to your patterns.</p>
+                    <div class="feature-illustration">
+                        <svg viewBox="0 0 200 150" class="illustration-svg">
+                            <!-- Brain/neural network -->
+                            <circle cx="100" cy="70" r="20" fill="none" stroke="#1A1F3A" stroke-width="2"/>
+                            <circle cx="70" cy="50" r="12" fill="#FFC107" opacity="0.7"/>
+                            <circle cx="130" cy="50" r="12" fill="#FFC107" opacity="0.7"/>
+                            <line x1="82" y1="58" x2="90" y2="65" stroke="#1A1F3A" stroke-width="2"/>
+                            <line x1="118" y1="65" x2="110" y2="58" stroke="#1A1F3A" stroke-width="2"/>
+                        </svg>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section id="features" class="section">
-            <div class="container">
-                <div class="section-header">
-                    <h2>Powerful Features</h2>
-                    <p>Advanced neurotechnology meets productivity optimization</p>
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="section dark-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>How It Works</h2>
+                <p>From brainwaves to light control in seconds</p>
+            </div>
+            <div class="process-steps">
+                <div class="step">
+                    <div class="step-number">01</div>
+                    <h3>Connect Hardware</h3>
+                    <p>Wear your Muse 2 EEG headband and ensure Arduino sensors are connected. The system continuously monitors your brain activity and environment.</p>
                 </div>
-                <div class="cards">
-                    <div class="card feature-card">
-                        <div class="card-icon">⚡</div>
-                        <h3>Focus Flow Detection & Adaptive Task Timing</h3>
-                        <p>Dynamically adjusts study session length based on EEG + GSR + HR data. Extends sessions during high focus and triggers micro-breaks during fatigue.</p>
-                        <div class="feature-illustration">
-                            <svg viewBox="0 0 200 150" class="illustration-svg">
-                                <!-- Anime figure studying with fatigue -->
-                                <!-- Head (anime style - larger) -->
-                                <circle cx="100" cy="45" r="22" fill="#FFDBAC"/>
-                                <!-- Hair -->
-                                <path d="M 78 35 Q 70 25 75 20 Q 85 15 100 18 Q 115 15 125 20 Q 130 25 122 35 Q 120 30 100 30 Q 80 30 78 35" fill="#4A3728"/>
-                                <!-- Body -->
-                                <rect x="88" y="67" width="24" height="40" rx="8" fill="#3182CE"/>
-                                <!-- Arms (tired position) -->
-                                <ellipse cx="75" cy="85" rx="8" ry="25" fill="#FFDBAC" transform="rotate(-20 75 85)"/>
-                                <ellipse cx="125" cy="85" rx="8" ry="25" fill="#FFDBAC" transform="rotate(20 125 85)"/>
-                                <!-- Eyes (tired - half closed) -->
-                                <ellipse cx="92" cy="45" rx="3" ry="5" fill="#2D3748"/>
-                                <ellipse cx="108" cy="45" rx="3" ry="5" fill="#2D3748"/>
-                                <!-- Mouth (tired) -->
-                                <path d="M 95 52 Q 100 54 105 52" stroke="#2D3748" stroke-width="2" fill="none"/>
-                                <!-- Desk -->
-                                <rect x="50" y="110" width="100" height="6" fill="#718096"/>
-                                <!-- Zzz (sleep indicator) -->
-                                <text x="120" y="35" font-size="12" fill="#F59E0B" font-weight="bold">Z</text>
-                                <text x="125" y="30" font-size="10" fill="#F59E0B" font-weight="bold">z</text>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="card feature-card">
-                        <div class="card-icon">🎵</div>
-                        <h3>Smart Audio Environment Analyzer</h3>
-                        <p>Uses sound sensor and audio analysis to detect background noise types (music, chatter, silence). Suggests or auto-plays optimal background sounds for focus.</p>
-                        <div class="feature-illustration">
-                            <svg viewBox="0 0 200 150" class="illustration-svg">
-                                <!-- Anime figure with headphones -->
-                                <!-- Head -->
-                                <circle cx="100" cy="50" r="22" fill="#FFDBAC"/>
-                                <!-- Hair -->
-                                <path d="M 78 40 Q 70 30 75 25 Q 85 20 100 23 Q 115 20 125 25 Q 130 30 122 40 Q 120 35 100 35 Q 80 35 78 40" fill="#4A3728"/>
-                                <!-- Headphones (anime style) -->
-                                <ellipse cx="75" cy="50" rx="28" ry="18" fill="#2D3748"/>
-                                <ellipse cx="125" cy="50" rx="28" ry="18" fill="#2D3748"/>
-                                <rect x="47" y="48" width="106" height="4" fill="#2D3748"/>
-                                <circle cx="75" cy="50" r="12" fill="#3182CE"/>
-                                <circle cx="125" cy="50" r="12" fill="#3182CE"/>
-                                <!-- Body -->
-                                <rect x="88" y="72" width="24" height="35" rx="8" fill="#319795"/>
-                                <!-- Eyes (focused) -->
-                                <circle cx="92" cy="50" r="3" fill="#2D3748"/>
-                                <circle cx="108" cy="50" r="3" fill="#2D3748"/>
-                                <!-- Sparkle in eyes -->
-                                <circle cx="93" cy="49" r="1" fill="white"/>
-                                <circle cx="109" cy="49" r="1" fill="white"/>
-                                <!-- Sound waves -->
-                                <path d="M 35 75 Q 45 65 55 75" stroke="#3182CE" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                                <path d="M 145 75 Q 155 65 165 75" stroke="#3182CE" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="card feature-card">
-                        <div class="card-icon">⚠️</div>
-                        <h3>Mental Fatigue & Burnout Predictor</h3>
-                        <p>Tracks EEG, HRV, and GSR trends to detect fatigue. Predicts upcoming burnout and recommends recovery breaks.</p>
-                        <div class="feature-illustration">
-                            <svg viewBox="0 0 200 150" class="illustration-svg">
-                                <!-- Anime figure showing fatigue/burnout -->
-                                <!-- Head -->
-                                <circle cx="100" cy="48" r="22" fill="#FFDBAC"/>
-                                <!-- Hair (messy/tired) -->
-                                <path d="M 78 38 Q 70 28 75 23 Q 85 18 100 21 Q 115 18 125 23 Q 130 28 122 38" fill="#4A3728"/>
-                                <path d="M 80 35 Q 75 30 80 25" fill="#4A3728"/>
-                                <!-- Body (slouching) -->
-                                <ellipse cx="100" cy="75" rx="20" ry="30" fill="#E53E3E"/>
-                                <!-- Arms (drooping) -->
-                                <ellipse cx="75" cy="80" rx="6" ry="20" fill="#FFDBAC" transform="rotate(-30 75 80)"/>
-                                <ellipse cx="125" cy="80" rx="6" ry="20" fill="#FFDBAC" transform="rotate(30 125 80)"/>
-                                <!-- Eyes (closed - tired) -->
-                                <path d="M 88 48 Q 92 50 96 48" stroke="#2D3748" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                                <path d="M 104 48 Q 108 50 112 48" stroke="#2D3748" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                                <!-- Sweat drops -->
-                                <circle cx="95" cy="42" r="2" fill="#4299E1"/>
-                                <circle cx="105" cy="42" r="2" fill="#4299E1"/>
-                                <!-- Warning symbol -->
-                                <path d="M 100 30 L 105 40 L 95 40 Z" fill="#F59E0B"/>
-                                <circle cx="100" cy="35" r="2" fill="#F59E0B"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="card feature-card">
-                        <div class="card-icon">🕐</div>
-                        <h3>ChronoFocus Analytics (Circadian Adaptation)</h3>
-                        <p>Learns the user's most productive times of day based on EEG and HR patterns. Suggests when to study or rest for optimal focus cycles.</p>
-                        <div class="feature-illustration">
-                            <svg viewBox="0 0 200 150" class="illustration-svg">
-                                <!-- Anime figure feeling sleepy (circadian) -->
-                                <!-- Head -->
-                                <circle cx="100" cy="50" r="22" fill="#FFDBAC"/>
-                                <!-- Hair -->
-                                <path d="M 78 40 Q 70 30 75 25 Q 85 20 100 23 Q 115 20 125 25 Q 130 30 122 40" fill="#4A3728"/>
-                                <!-- Body (pajamas/nightwear) -->
-                                <rect x="88" y="72" width="24" height="35" rx="8" fill="#9333EA"/>
-                                <!-- Eyes (sleepy - half closed) -->
-                                <ellipse cx="92" cy="50" rx="4" ry="6" fill="#2D3748"/>
-                                <ellipse cx="108" cy="50" rx="4" ry="6" fill="#2D3748"/>
-                                <!-- Yawning mouth -->
-                                <ellipse cx="100" cy="58" rx="6" ry="4" fill="#2D3748"/>
-                                <!-- Sleepy Zzz -->
-                                <text x="125" y="40" font-size="14" fill="#D69E2E" font-weight="bold">Z</text>
-                                <text x="130" y="35" font-size="12" fill="#D69E2E" font-weight="bold">z</text>
-                                <text x="135" y="30" font-size="10" fill="#D69E2E" font-weight="bold">z</text>
-                                <!-- Clock (circadian rhythm) -->
-                                <circle cx="160" cy="40" r="18" fill="white" stroke="#3182CE" stroke-width="2"/>
-                                <line x1="160" y1="40" x2="160" y2="28" stroke="#3182CE" stroke-width="2.5" stroke-linecap="round"/>
-                                <line x1="160" y1="40" x2="170" y2="40" stroke="#3182CE" stroke-width="2" stroke-linecap="round"/>
-                                <circle cx="160" cy="40" r="2" fill="#3182CE"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="card feature-card">
-                        <div class="card-icon">🧘</div>
-                        <h3>Adaptive Mindfulness & Cooldown Mode</h3>
-                        <p>After high-stress study sessions, guides breathing or mindfulness using vibration cues. Ends session when EEG calmness is detected.</p>
-                        <div class="feature-illustration">
-                            <svg viewBox="0 0 200 150" class="illustration-svg">
-                                <!-- Anime figure meditating -->
-                                <!-- Head -->
-                                <circle cx="100" cy="55" r="22" fill="#FFDBAC"/>
-                                <!-- Hair (calm/neat) -->
-                                <path d="M 78 45 Q 70 35 75 30 Q 85 25 100 28 Q 115 25 125 30 Q 130 35 122 45" fill="#4A3728"/>
-                                <!-- Body (meditation pose) -->
-                                <ellipse cx="100" cy="90" rx="22" ry="30" fill="#38A169"/>
-                                <!-- Arms (meditation position) -->
-                                <ellipse cx="75" cy="75" rx="6" ry="18" fill="#FFDBAC" transform="rotate(-45 75 75)"/>
-                                <ellipse cx="125" cy="75" rx="6" ry="18" fill="#FFDBAC" transform="rotate(45 125 75)"/>
-                                <!-- Hands (meditation mudra) -->
-                                <circle cx="70" cy="85" r="4" fill="#FFDBAC"/>
-                                <circle cx="130" cy="85" r="4" fill="#FFDBAC"/>
-                                <!-- Eyes (closed - peaceful) -->
-                                <path d="M 88 55 Q 92 57 96 55" stroke="#2D3748" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                                <path d="M 104 55 Q 108 57 112 55" stroke="#2D3748" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                                <!-- Calm smile -->
-                                <path d="M 92 62 Q 100 65 108 62" stroke="#2D3748" stroke-width="2" fill="none" stroke-linecap="round"/>
-                                <!-- Zen/calm aura -->
-                                <circle cx="100" cy="55" r="35" fill="none" stroke="#38A169" stroke-width="2" opacity="0.3" stroke-dasharray="4,4"/>
-                                <!-- Peaceful sparkles -->
-                                <circle cx="85" cy="40" r="2" fill="#38A169" opacity="0.6"/>
-                                <circle cx="115" cy="40" r="2" fill="#38A169" opacity="0.6"/>
-                            </svg>
-                        </div>
-                    </div>
+                <div class="step">
+                    <div class="step-number">02</div>
+                    <h3>Real-Time Analysis</h3>
+                    <p>Python processes EEG signals in real-time, detecting patterns that indicate potential migraine onset—stress spikes, focus drops, HRV changes.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">03</div>
+                    <h3>Automatic Response</h3>
+                    <p>When patterns are detected, Arduino automatically dims lights via LED module. You're prompted to log triggers and reduce screen brightness.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">04</div>
+                    <h3>Learn & Improve</h3>
+                    <p>Data is stored in Firebase. Over time, the system learns your personal triggers and becomes more accurate at predicting episodes.</p>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section id="how-it-works" class="section dark-section">
-            <div class="container">
-                <div class="section-header">
-                    <h2>How It Works</h2>
-                    <p>Leveraging cutting-edge hardware and AI for optimal focus</p>
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Live Dashboard</h2>
+                <p>Monitor your brain activity and environment in real-time</p>
+            </div>
+            <div class="dashboard-grid">
+                <div class="dashboard-card focus-meter">
+                    <h3>Current Focus Level</h3>
+                    <div class="meter-container">
+                        <div class="meter-circle">
+                            <div class="meter-value">78%</div>
+                            <div class="meter-label">High Focus</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="process-steps">
-                    <div class="step">
-                        <div class="step-number">01</div>
-                        <h3>Connect Hardware</h3>
-                        <p>Connect your Muse 2 EEG headband, Arduino sensors, and wearable devices for comprehensive biometric monitoring.</p>
+                <div class="dashboard-card session-info">
+                    <h3>Session Stats</h3>
+                    <div class="stat-row">
+                        <span>Duration:</span>
+                        <strong>2:34:12</strong>
                     </div>
-                    <div class="step">
-                        <div class="step-number">02</div>
-                        <h3>Real-Time Analysis</h3>
-                        <p>Our system continuously analyzes EEG signals, heart rate, GSR, and audio environment in real-time to monitor your focus and fatigue levels.</p>
+                    <div class="stat-row">
+                        <span>EEG Attention:</span>
+                        <strong>82%</strong>
                     </div>
-                    <div class="step">
-                        <div class="step-number">03</div>
-                        <h3>Adaptive Optimization</h3>
-                        <p>AI algorithms dynamically adjust study session length, trigger breaks, optimize audio environment, and guide mindfulness based on your biometric data.</p>
+                    <div class="stat-row">
+                        <span>Events Detected:</span>
+                        <strong>1</strong>
                     </div>
-                    <div class="step">
-                        <div class="step-number">04</div>
-                        <h3>Insights & Growth</h3>
-                        <p>Receive detailed analytics and actionable insights to improve your study habits and maximize productivity over time.</p>
+                    <div class="stat-row">
+                        <span>Auto Actions:</span>
+                        <strong>2</strong>
                     </div>
+                </div>
+                <div class="dashboard-card environment">
+                    <h3>Environment</h3>
+                    <div class="env-metric">
+                        <span>💡 Ambient Light</span>
+                        <strong>45%</strong>
+                    </div>
+                    <div class="env-metric">
+                        <span>🌡️ Temperature</span>
+                        <strong>22°C</strong>
+                    </div>
+                    <div class="env-metric">
+                        <span>💧 Humidity</span>
+                        <strong>65%</strong>
+                    </div>
+                </div>
+                <div class="dashboard-card recommendations">
+                    <h3>Recommendations</h3>
+                    <ul class="recommendations-list">
+                        <li>✅ Environment conditions optimal</li>
+                        <li>⚠️ Stress level elevated - consider break</li>
+                        <li>💡 Lights auto-dimmed at 14:23</li>
+                        <li>📝 Log trigger: Recent caffeine intake?</li>
+                    </ul>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section id="dashboard" class="section">
-            <div class="container">
-                <div class="section-header">
-                    <h2>Live Dashboard</h2>
-                    <p>Monitor your focus and productivity metrics in real-time</p>
+    <!-- About Section -->
+    <section id="about" class="section dark-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>About MigroMinder</h2>
+                <p>Built with empathy, powered by technology</p>
+            </div>
+            <div class="grid grid-2" style="max-width: 1000px; margin: 0 auto;">
+                <div class="card">
+                    <h3>Our Inspiration</h3>
+                    <p>The spark came from one teammate's grandmother, who endures frequent migraines that make everyday light feel like a flashbang. We wanted to make something that reacts faster than a person can—a little guardian that listens to your brain before the pain hits.</p>
+                    <p style="margin-top: 1rem; font-style: italic; color: var(--text-gray);">
+                        "The migraine is not a disease of the brain, but a disorder of energy, of control, of balance."<br>
+                        <strong>— Oliver Sacks, Migraine</strong>
+                    </p>
                 </div>
-                <div class="dashboard-grid">
-                    <div class="dashboard-card focus-meter">
-                        <h3>Current Focus Level</h3>
-                        <div class="meter-container">
-                            <div class="meter-circle">
-                                <div class="meter-value">78%</div>
-                                <div class="meter-label">High Focus</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dashboard-card session-info">
-                        <h3>Session Stats</h3>
-                        <div class="stat-row">
-                            <span>Duration:</span>
-                            <strong>45:23</strong>
-                        </div>
-                        <div class="stat-row">
-                            <span>Avg Focus:</span>
-                            <strong>82%</strong>
-                        </div>
-                        <div class="stat-row">
-                            <span>Breaks Taken:</span>
-                            <strong>2</strong>
-                        </div>
-                    </div>
-                    <div class="dashboard-card environment">
-                        <h3>Audio Environment</h3>
-                        <div class="env-metric">
-                            <span>🎵 Background Sound</span>
-                            <strong>Focus Music</strong>
-                        </div>
-                        <div class="env-metric">
-                            <span>🔊 Noise Level</span>
-                            <strong>Low</strong>
-                        </div>
-                        <div class="env-metric">
-                            <span>📊 Audio Analysis</span>
-                            <strong>Optimal</strong>
-                        </div>
-                    </div>
-                    <div class="dashboard-card recommendations">
-                        <h3>Recommendations</h3>
-                        <ul class="recommendations-list">
-                            <li>✅ High focus detected - session extended</li>
-                            <li>⚠️ Fatigue building - break recommended in 10 min</li>
-                            <li>🕐 Peak focus time: 2:00 PM - 4:00 PM</li>
-                        </ul>
-                    </div>
+                <div class="card">
+                    <h3>Technology Stack</h3>
+                    <ul style="list-style: disc; padding-left: 1.5rem; color: var(--text-gray); line-height: 2;">
+                        <li><strong>Flask / React.js</strong> – Dashboard & event logging</li>
+                        <li><strong>Python (Muse SDK)</strong> – Real-time EEG processing</li>
+                        <li><strong>Arduino (C/C++)</strong> – Light control & sensors</li>
+                        <li><strong>Firebase / Firestore</strong> – Data storage</li>
+                        <li><strong>Muse 2 Headband</strong> – EEG, HR, motion tracking</li>
+                    </ul>
                 </div>
             </div>
-        </section>
-    </main>
+        </div>
+    </section>
 
+    <!-- Footer -->
     <footer>
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3>NeuralCare</h3>
-                    <p>Enhancing productivity through neural intelligence</p>
+                    <h3>MigroMinder</h3>
+                    <p>Easing the mind, one light at a time</p>
+                    <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">
+                        MigroMinder doesn't try to stop the storm—it just knows when to turn down the lights.
+                    </p>
                 </div>
                 <div class="footer-section">
                     <h4>Hardware</h4>
-                    <p>Muse 2 • Arduino • BioAmp EXG • GSR Sensor • IMU Sensor</p>
+                    <p>Muse 2 • Arduino • DHT11 • LDR • OLED • Vibrating Motor</p>
                 </div>
                 <div class="footer-section">
                     <h4>Project</h4>
-                    <p>NatHax Project - EdTech Innovation</p>
+                    <p>NatHax Project</p>
+                    <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+                        Built with ❤️ for those who understand the storm
+                    </p>
                 </div>
             </div>
-            <p class="footer-copyright">&copy; 2024 NeuralCare. All rights reserved.</p>
+            <p class="footer-copyright">&copy; 2024 MigroMinder. All rights reserved.</p>
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <!-- JavaScript Files -->
+    <script src="js/api.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
-
