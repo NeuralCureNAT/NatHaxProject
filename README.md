@@ -1,13 +1,13 @@
-# 🧠 MigraMinder: The Light that Listens to Your Brain  
+# 🧠 MigroMinder: Easing the mind, one light at a time
 
 <p align="center">
-  <img src="assets/migraminder_logo.png" alt="MigraMinder Logo" width="300"/>
+  <img src="assets/migrominder_logo.png" alt="MigroMinder Logo" width="300"/>
 </p>
 
 ---
 
 ## 📖 About  
-**MigraMinder** is an intelligent migraine management assistant that bridges neurotechnology and environmental control. Using real-time EEG signals from the **Muse 2** headband, the system detects early neurological signatures of migraine onset and automatically adjusts ambient lighting or screen brightness via an **Arduino-controlled light module**.  
+**MigroMinder** is an intelligent migraine management assistant that bridges neurotechnology and environmental control. Using real-time EEG signals from the **Muse 2** headband, the system detects early neurological signatures of migraine onset and automatically adjusts ambient lighting or screen brightness via an **Arduino-controlled light module**.  
 
 When a potential migraine episode is detected, MigraMinder gently dims the environment, logs the event, and prompts the user to record contextual causes — stress, noise, caffeine, or the inevitable group project panic.  
 
@@ -49,7 +49,7 @@ It also doubles as a savior for university students who can finally say,
 - 💡 Adapts the environment: dims lights automatically or prompts users to reduce screen brightness.  
 - 🗒️ Logs triggers: prompts users to tag the cause (noise, fatigue, weather, coursework).  
 - 📊 Visualizes data: shows EEG trends, trigger frequency, and environment correlation.  
-- 🤖 Personalizes recommendations: over time, MigraMinder learns which conditions precede migraines.  
+- 🤖 Personalizes recommendations: over time, MigroMinder learns which conditions precede migraines.  
 
 ---
 
@@ -80,7 +80,7 @@ It also doubles as a savior for university students who can finally say,
 - Expanding detection accuracy with **machine learning** trained on diverse EEG data.  
 - Integrating with **smart-home ecosystems** (Alexa, Philips Hue) for seamless light control.  
 - Building a **mobile companion app** for quick trigger logging and real-time alerts.  
-- Collaborating with neurologists to test MigraMinder as a clinical support tool.  
+- Collaborating with neurologists to test MigroMinder as a clinical support tool.  
 
 ---
 
@@ -88,4 +88,4 @@ It also doubles as a savior for university students who can finally say,
 In the words of **Oliver Sacks**,  
 > “Migraine is a kind of electrical storm of the nervous system.”  
 
-**MigraMinder** doesn’t try to stop the storm — it just knows when to turn down the lights.  
+**MigroMinder** doesn’t try to stop the storm — it just knows when to turn down the lights.  
