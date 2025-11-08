@@ -1,7 +1,7 @@
-# 🧠 MigroMinder: Easing the mind, one light at a time
+# 🧠 MigroMinder
 
 <p align="center">
-  <img src="./images/migrominder_logo.png" alt="MigroMinder Logo" width="350"/>
+  <img src="./images/migrominder_logo.png" alt="MigroMinder Logo" width="400"/>
 </p>
 
 ---
