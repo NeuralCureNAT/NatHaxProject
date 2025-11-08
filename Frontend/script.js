@@ -145,5 +145,5 @@ document.querySelectorAll('.dashboard-card').forEach(card => {
 });
 
 // Console log for debugging
-console.log('StudyAmp - NeuralCare Frontend Loaded');
+console.log('NeuralCare Frontend Loaded');
 console.log('Ready to connect to Muse 2 EEG and Arduino sensors');
