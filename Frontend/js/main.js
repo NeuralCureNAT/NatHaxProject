@@ -71,33 +71,33 @@ class MigroMinderApp {
     }
 
     async handleStartSession() {
-    const btn = document.querySelector('.btn.btn-primary');
-    if (!btn) return;
+        const btn = document.querySelector('.btn.btn-primary');
+        if (!btn) return;
 
-    if (btn.dataset.active === '1') {
-        this.showNotification('Session is already active.');
-        return;
+        if (btn.dataset.active === '1') {
+            this.showNotification('Session is already active.');
+            return;
+        }   
+
+        const originalText = btn.textContent;
+        btn.textContent = 'Connecting...';
+        btn.disabled = true;
+
+        try {
+            const connected = this.api ? await this.api.checkConnection() : false;
+
+            this.startRealTimeMonitoring();
+            btn.textContent = connected ? 'Session Active' : 'Session Active (Mock Mode)';
+            btn.classList.add('btn-accent');
+            btn.dataset.active = '1';
+            btn.disabled = false;
+
+        } catch (e) {
+            console.error(e);
+            btn.textContent = originalText;
+            btn.disabled = false;
+        }
     }
-
-    const originalText = btn.textContent;
-    btn.textContent = 'Connecting...';
-    btn.disabled = true;
-
-    try {
-        const connected = this.api ? await this.api.checkConnection() : false;
-
-        this.startRealTimeMonitoring();
-        btn.textContent = connected ? 'Session Active' : 'Session Active (Mock Mode)';
-        btn.classList.add('btn-accent');
-        btn.dataset.active = '1';
-        btn.disabled = false;
-
-    } catch (e) {
-        console.error(e);
-        btn.textContent = originalText;
-        btn.disabled = false;
-    }
-}
 
     startRealTimeMonitoring() {
         if (this.dataUpdateInterval) clearInterval(this.dataUpdateInterval);
