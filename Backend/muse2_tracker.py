@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 from datetime import datetime
 import threading
+import json
 import queue
 import sys
 import platform
@@ -82,6 +83,37 @@ FREQ_BANDS = {
 # EEG channel names for Muse 2
 EEG_CHANNELS = ['TP9', 'AF7', 'AF8', 'TP10']
 
+# ---- Heuristic metrics for UI percentages ----
+def _safe_pct(x):
+    try:
+        if x is None or x != x:  # NaN
+            return 0
+        return max(0, min(100, int(round(x))))
+    except:
+        return 0
+
+def compute_focus_metrics(eeg_bands_avg):
+    """
+    Map band powers to simple 0..100 scores for the UI.
+    eeg_bands_avg: {'delta':..., 'theta':..., 'alpha':..., 'beta':..., 'gamma':...}
+    """
+    a = float(eeg_bands_avg.get('alpha', 0) or 0)
+    b = float(eeg_bands_avg.get('beta',  0) or 0)
+    t = float(eeg_bands_avg.get('theta', 0) or 0)
+    d = float(eeg_bands_avg.get('delta', 0) or 0)
+    g = float(eeg_bands_avg.get('gamma', 0) or 0)
+    eps = 1e-9
+    total = a + b + t + d + g + eps
+
+    focus_raw      = (b / total) * 100.0
+    attention_raw  = (b / (a + t + eps)) * 60.0      # scaled
+    meditation_raw = (a / (a + b + t + eps)) * 100.0
+
+    return {
+        "focus":      _safe_pct(focus_raw),
+        "attention":  _safe_pct(attention_raw),
+        "meditation": _safe_pct(meditation_raw),
+    }
 
 class VisualizationDashboard:
     """Real-time visualization dashboard for Muse 2 data"""
@@ -275,6 +307,7 @@ class VisualizationDashboard:
         if self.breath_text:
             artists.append(self.breath_text)
         return artists
+    
     
     def update_metric_boxes(self):
         """Update the metric display boxes"""
@@ -925,6 +958,26 @@ class Muse2Tracker:
                                     beta_avg = np.mean(beta_powers) if beta_powers else 0.0
                                     gamma_avg = np.mean(gamma_powers) if gamma_powers else 0.0
                                     
+                                    try:
+                                        eeg_avg = {
+                                            'delta': float(delta_avg or 0.0),
+                                            'theta': float(theta_avg or 0.0),
+                                            'alpha': float(alpha_avg or 0.0),
+                                            'beta':  float(beta_avg  or 0.0),
+                                            'gamma': float(gamma_avg or 0.0),
+                                        }
+                                        metrics = compute_focus_metrics(eeg_avg)
+                                        latest = {
+                                            **metrics,
+                                            "timestamp": datetime.utcnow().isoformat() + "Z"
+                                        }
+                                        # Write in the working directory where you run the tracker.
+                                        # If you run it from project root, app.py will still find it.
+                                        with open("latest.json", "w") as f:
+                                            json.dump(latest, f)
+                                    except Exception as e:
+                                        pass
+
                                     # Update dashboard
                                     self.dashboard.update_data(delta_avg, theta_avg, alpha_avg, beta_avg, gamma_avg)
                                     self.dashboard.update_metrics(
