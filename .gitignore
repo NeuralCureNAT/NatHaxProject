@@ -36,3 +36,8 @@ dist/
 build/
 *.egg-info/
 
+# EEG runtime artifacts
+latest.json
+muse2_data_raw_*.csv
+muse2_data_processed_*.csv
+
