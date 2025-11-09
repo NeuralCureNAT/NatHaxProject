@@ -40,7 +40,7 @@ class MigroMinderApp {
 
     setupEventListeners() {
         // Start Session button
-        const startSessionBtn = document.querySelector('.btn-primary, .cta-button.primary');
+        const startSessionBtn = document.querySelector('.btn.btn-primary');
         if (startSessionBtn) {
             startSessionBtn.addEventListener('click', () => {
                 this.handleStartSession();
@@ -48,7 +48,7 @@ class MigroMinderApp {
         }
 
         // View Dashboard button
-        const viewDashboardBtn = document.querySelector('.btn-secondary, .cta-button.secondary');
+        const viewDashboardBtn = document.querySelector('.btn.btn-secondary');
         if (viewDashboardBtn) {
             viewDashboardBtn.addEventListener('click', () => {
                 this.scrollToSection('dashboard');
@@ -71,34 +71,33 @@ class MigroMinderApp {
     }
 
     async handleStartSession() {
-        console.log('Starting MigroMinder session...');
-        
-        const btn = document.querySelector('.btn-primary, .cta-button.primary');
-        if (!btn) return;
-        
-        const originalText = btn.textContent;
-        btn.textContent = 'Connecting...';
-        btn.disabled = true;
+    const btn = document.querySelector('.btn.btn-primary');
+    if (!btn) return;
 
-        try {
-            if (this.api) {
-                const connected = await this.api.checkConnection();
-                if (connected) {
-                    this.startRealTimeMonitoring();
-                    btn.textContent = 'Session Active';
-                    btn.classList.add('btn-accent');
-                } else {
-                    btn.textContent = 'Session Active (Mock Mode)';
-                }
-            } else {
-                btn.textContent = 'Session Active (Mock Mode)';
-            }
-        } catch (error) {
-            console.error('Error starting session:', error);
-            btn.textContent = originalText;
-            btn.disabled = false;
-        }
+    if (btn.dataset.active === '1') {
+        this.showNotification('Session is already active.');
+        return;
     }
+
+    const originalText = btn.textContent;
+    btn.textContent = 'Connecting...';
+    btn.disabled = true;
+
+    try {
+        const connected = this.api ? await this.api.checkConnection() : false;
+
+        this.startRealTimeMonitoring();
+        btn.textContent = connected ? 'Session Active' : 'Session Active (Mock Mode)';
+        btn.classList.add('btn-accent');
+        btn.dataset.active = '1';
+        btn.disabled = false;
+
+    } catch (e) {
+        console.error(e);
+        btn.textContent = originalText;
+        btn.disabled = false;
+    }
+}
 
     startRealTimeMonitoring() {
         if (this.dataUpdateInterval) clearInterval(this.dataUpdateInterval);
@@ -176,10 +175,17 @@ class MigroMinderApp {
     }
 
     updateEnvironmentDisplay(data) {
-        // Update environment metrics
-        const envMetrics = document.querySelectorAll('.env-metric strong');
-        // Implementation for updating display
-    }
+    // Expects: { light: 0-100, temperature: C, humidity: %, timestamp }
+    const env = {
+        light: document.querySelector('.env-metric:nth-child(1) strong'),
+        temperature: document.querySelector('.env-metric:nth-child(2) strong'),
+        humidity: document.querySelector('.env-metric:nth-child(3) strong'),
+    };
+    if (env.light && typeof data.light === 'number') env.light.textContent = `${data.light}%`;
+    if (env.temperature && typeof data.temperature === 'number') env.temperature.textContent = `${data.temperature}°C`;
+    if (env.humidity && typeof data.humidity === 'number') env.humidity.textContent = `${data.humidity}%`;
+}
+
 
     pauseUpdates() {
         if (this.dataUpdateInterval) clearInterval(this.dataUpdateInterval);

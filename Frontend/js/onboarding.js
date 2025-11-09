@@ -109,26 +109,30 @@ class OnboardingFlow {
         alert('Please select an option to continue');
     }
 
-    selectOption(key, value) {
-        this.userData[key] = value;
-        
-        // Visual feedback
-        event.target.closest('.options-grid').querySelectorAll('.option-card').forEach(card => {
-            card.classList.remove('selected');
-        });
-        event.target.closest('.option-card').classList.add('selected');
+    selectOption(key, value, el = null) {
+    this.userData[key] = value;
 
-        // Auto-advance for single-select questions
-        if (key !== 'triggers') {
-            setTimeout(() => this.nextStep(), 300);
-        } else {
-            // Enable continue button for multi-select
-            const continueBtn = document.getElementById('step4Next');
-            if (continueBtn && this.userData.triggers.length > 0) {
-                continueBtn.disabled = false;
-            }
+    // Find the card from 'el' (preferred) or fall back to selection in active step
+    const container = (el ? el.closest('.options-grid')
+                          : document.querySelector('.onboarding-step.active .options-grid'));
+    if (!container) return;
+
+    container.querySelectorAll('.option-card').forEach(card => card.classList.remove('selected'));
+
+    const card = el ? (el.classList.contains('option-card') ? el : el.closest('.option-card'))
+                    : null;
+    if (card) card.classList.add('selected');
+
+    // Auto-advance for single-select
+    if (key !== 'triggers') {
+        setTimeout(() => this.nextStep(), 300);
+    } else {
+        const continueBtn = document.getElementById('step4Next');
+        if (continueBtn && this.userData.triggers.length > 0) {
+            continueBtn.disabled = false;
         }
     }
+}
 
     toggleOption(key, value, element) {
         // Ensure we have the correct key (triggers, not trigger)

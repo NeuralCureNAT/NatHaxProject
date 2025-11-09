@@ -1,162 +1,151 @@
 /**
  * API Module
  * Handles communication with backend/Flask API
- * Placeholder for real API integration
+ * Falls back to mock data if API is unavailable
  */
 
 class API {
-    constructor() {
-        this.baseURL = 'http://localhost:5000/api'; // Update with your Flask backend URL
-        this.init();
-    }
+  constructor() {
+    // Update this if your Flask server lives elsewhere
+    this.baseURL = 'http://localhost:5000/api';
+    this.init();
+  }
 
-    init() {
-        // Check API connection on load
-        this.checkConnection();
-    }
+  init() {
+    this.checkConnection();
+  }
 
-    async checkConnection() {
-        try {
-            const response = await fetch(`${this.baseURL}/health`);
-            if (response.ok) {
-                console.log('API connection successful');
-                return true;
-            }
-        } catch (error) {
-            console.warn('API not available, using mock data:', error);
-            return false;
-        }
+  // Small helper to avoid repeating ok checks
+  async fetchJSON(path, options = {}) {
+    const res = await fetch(`${this.baseURL}${path}`, {
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      ...options,
+    });
+    if (!res.ok) {
+      const text = await res.text().catch(() => '');
+      throw new Error(`HTTP ${res.status} ${res.statusText} — ${text}`);
     }
+    return res.json();
+  }
 
-    // Get real-time EEG data from Muse 2
-    async getEEGData() {
-        try {
-            const response = await fetch(`${this.baseURL}/eeg/current`);
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error('Error fetching EEG data:', error);
-            return this.getMockEEGData();
-        }
+  async checkConnection() {
+    try {
+      await this.fetchJSON('/health');
+      console.log('API connection successful');
+      return true;
+    } catch (error) {
+      console.warn('API not available, using mock data:', error);
+      return false;
     }
+  }
 
-    // Get migraine event history
-    async getMigraineHistory(limit = 10) {
-        try {
-            const response = await fetch(`${this.baseURL}/migraines?limit=${limit}`);
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error('Error fetching migraine history:', error);
-            return this.getMockMigraineHistory();
-        }
+  // Get real-time EEG data from Muse 2
+  async getEEGData() {
+    try {
+      return await this.fetchJSON('/eeg/current');
+    } catch (error) {
+      console.error('Error fetching EEG data:', error);
+      return this.getMockEEGData();
     }
+  }
 
-    // Log a new migraine event
-    async logMigraineEvent(eventData) {
-        try {
-            const response = await fetch(`${this.baseURL}/migraines`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(eventData),
-            });
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error('Error logging migraine event:', error);
-            return { success: false, error: error.message };
-        }
+  // Get migraine event history
+  async getMigraineHistory(limit = 10) {
+    try {
+      return await this.fetchJSON(`/migraines?limit=${encodeURIComponent(limit)}`);
+    } catch (error) {
+      console.error('Error fetching migraine history:', error);
+      return this.getMockMigraineHistory();
     }
+  }
 
-    // Get environment sensor data (Arduino)
-    async getEnvironmentData() {
-        try {
-            const response = await fetch(`${this.baseURL}/environment/current`);
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error('Error fetching environment data:', error);
-            return this.getMockEnvironmentData();
-        }
+  // Log a new migraine event
+  async logMigraineEvent(eventData) {
+    try {
+      return await this.fetchJSON('/migraines', {
+        method: 'POST',
+        body: JSON.stringify(eventData),
+      });
+    } catch (error) {
+      console.error('Error logging migraine event:', error);
+      return { success: false, error: error.message };
     }
+  }
 
-    // Control Arduino light module
-    async controlLight(brightness) {
-        try {
-            const response = await fetch(`${this.baseURL}/arduino/light`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ brightness }),
-            });
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error('Error controlling light:', error);
-            return { success: false, error: error.message };
-        }
+  // Get environment sensor data (Arduino)
+  async getEnvironmentData() {
+    try {
+      return await this.fetchJSON('/environment/current');
+    } catch (error) {
+      console.error('Error fetching environment data:', error);
+      return this.getMockEnvironmentData();
     }
+  }
 
-    // Log user profile from onboarding
-    async logUserProfile(userData) {
-        try {
-            const response = await fetch(`${this.baseURL}/user/profile`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(userData),
-            });
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error('Error logging user profile:', error);
-            return { success: false, error: error.message };
-        }
+  // Control Arduino light module
+  async controlLight(brightness) {
+    try {
+      return await this.fetchJSON('/arduino/light', {
+        method: 'POST',
+        body: JSON.stringify({ brightness }),
+      });
+    } catch (error) {
+      console.error('Error controlling light:', error);
+      return { success: false, error: error.message };
     }
+  }
 
-    // Mock data for development/testing
-    getMockEEGData() {
-        return {
-            focus: Math.floor(Math.random() * 30) + 70,
-            attention: Math.floor(Math.random() * 20) + 60,
-            meditation: Math.floor(Math.random() * 25) + 50,
-            timestamp: new Date().toISOString()
-        };
+  // Log user profile from onboarding
+  async logUserProfile(userData) {
+    try {
+      return await this.fetchJSON('/user/profile', {
+        method: 'POST',
+        body: JSON.stringify(userData),
+      });
+    } catch (error) {
+      console.error('Error logging user profile:', error);
+      return { success: false, error: error.message };
     }
+  }
 
-    getMockMigraineHistory() {
-        return [
-            {
-                id: 1,
-                timestamp: new Date(Date.now() - 86400000).toISOString(),
-                severity: 'moderate',
-                triggers: ['stress', 'screen_time'],
-                duration: 120
-            },
-            {
-                id: 2,
-                timestamp: new Date(Date.now() - 172800000).toISOString(),
-                severity: 'mild',
-                triggers: ['noise'],
-                duration: 45
-            }
-        ];
-    }
+  // -------- Mock data for development/testing --------
+  getMockEEGData() {
+    return {
+      focus: Math.floor(Math.random() * 30) + 70,
+      attention: Math.floor(Math.random() * 20) + 60,
+      meditation: Math.floor(Math.random() * 25) + 50,
+      timestamp: new Date().toISOString(),
+    };
+  }
 
-    getMockEnvironmentData() {
-        return {
-            light: Math.floor(Math.random() * 100),
-            temperature: Math.floor(Math.random() * 10) + 20,
-            humidity: Math.floor(Math.random() * 30) + 40,
-            timestamp: new Date().toISOString()
-        };
-    }
+  getMockMigraineHistory() {
+    return [
+      {
+        id: 1,
+        timestamp: new Date(Date.now() - 86400000).toISOString(),
+        severity: 'moderate',
+        triggers: ['stress', 'screen_time'],
+        duration: 120,
+      },
+      {
+        id: 2,
+        timestamp: new Date(Date.now() - 172800000).toISOString(),
+        severity: 'mild',
+        triggers: ['noise'],
+        duration: 45,
+      },
+    ];
+  }
+
+  getMockEnvironmentData() {
+    return {
+      light: Math.floor(Math.random() * 100),
+      temperature: Math.floor(Math.random() * 10) + 20,
+      humidity: Math.floor(Math.random() * 30) + 40,
+      timestamp: new Date().toISOString(),
+    };
+  }
 }
 
 // Export for use in other modules
 window.API = new API();
-
