@@ -211,13 +211,13 @@ class OnboardingFlow {
 
     saveData() {
         // Save to localStorage
-        localStorage.setItem('migrominder_user_data', JSON.stringify(this.userData));
-        localStorage.setItem('migrominder_onboarding_complete', 'true');
+        localStorage.setItem('migraineminder_user_data', JSON.stringify(this.userData));
+        localStorage.setItem('migraineminder_onboarding_complete', 'true');
     }
 
     loadSavedData() {
         // Load from localStorage if exists
-        const saved = localStorage.getItem('migrominder_user_data');
+        const saved = localStorage.getItem('migraineminder_user_data');
         if (saved) {
             try {
                 this.userData = { ...this.userData, ...JSON.parse(saved) };
@@ -285,7 +285,7 @@ function completeOnboarding() {
 function handleNoMuse2(element) {
     // Show prompt to wear Muse 2
     const response = confirm(
-        "MigroMinder works best with real-time EEG data from a Muse 2 headband.\n\n" +
+        "MigraineMinder works best with real-time EEG data from a Muse 2 headband.\n\n" +
         "Please wear your Muse 2 headband and ensure it's connected before continuing.\n\n" +
         "If you don't have a Muse 2, you can still use demo mode, but predictions will be limited.\n\n" +
         "Do you want to continue anyway?"

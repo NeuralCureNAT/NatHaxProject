@@ -18,7 +18,7 @@ This script trains and compares two advanced deep learning models:
 ## Quick Start
 
 ```bash
-cd MigroMinder/model/deep_learning
+cd MigraineMinder/model/deep_learning
 python train_cnn_lstm_transformer.py
 ```
 

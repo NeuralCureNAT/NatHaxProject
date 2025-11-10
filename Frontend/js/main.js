@@ -3,7 +3,7 @@
  * Initializes all modules and handles app-wide functionality
  */
 
-class MigroMinderApp {
+class MigraineMinderApp {
     constructor() {
         this.navigation = null;
         this.dashboard = null;
@@ -24,7 +24,7 @@ class MigroMinderApp {
     }
 
     start() {
-        console.log('🧠 MigroMinder App Initializing...');
+        console.log('🧠 MigraineMinder App Initializing...');
         
         // Initialize modules (they auto-initialize, but we can reference them)
         this.api = window.API || null;
@@ -35,7 +35,7 @@ class MigroMinderApp {
         // Initialize real-time data updates
         this.startDataUpdates();
 
-        console.log('✅ MigroMinder App Ready');
+        console.log('✅ MigraineMinder App Ready');
     }
 
     setupEventListeners() {
@@ -204,5 +204,5 @@ class MigroMinderApp {
 }
 
 // Initialize app
-const app = new MigroMinderApp();
-window.MigroMinderApp = app;
+const app = new MigraineMinderApp();
+window.MigraineMinderApp = app;

@@ -9,14 +9,14 @@ This folder contains the deep learning pipeline for predicting EEG migraine seve
 ### Run Deep Learning Pipeline
 
 ```bash
-cd MigroMinder/model/deep_learning
+cd MigraineMinder/model/deep_learning
 python train_deep_learning.py
 ```
 
 Or from the model directory:
 
 ```bash
-cd MigroMinder/model
+cd MigraineMinder/model
 cd deep_learning
 python train_deep_learning.py
 ```

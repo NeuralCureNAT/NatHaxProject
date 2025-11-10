@@ -1,4 +1,26 @@
-# MigroMinder Frontend
+# MigraineMinder Frontend
+
+## 🚀 Quick Start
+
+### Setup Instructions
+
+**1) Navigate to Frontend directory**
+
+```bash
+cd Frontend
+```
+
+**2) Run frontend server (no dependencies needed - uses built-in Python HTTP server)**
+
+```bash
+python3 -m http.server 5500
+```
+
+Then visit the UI at **http://localhost:5500**
+
+> **Note:** Make sure the backend is running first (see Backend/README.md). The frontend will connect to the backend API at `http://localhost:5050/api`.
+
+---
 
 ## 📁 Project Structure
 
@@ -30,7 +52,7 @@ Frontend/
 
 ## 🎨 Color Theme
 
-Based on MigroMinder logo:
+Based on MigraineMinder logo:
 - **Light Beige**: `#F5F1E8` (background)
 - **Dark Blue/Black**: `#1A1F3A` (primary text, accents)
 - **Yellow/Gold**: `#FFC107` (accent color, highlights)

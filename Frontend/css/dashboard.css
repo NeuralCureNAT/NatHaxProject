@@ -361,3 +361,45 @@
     font-family: var(--font-mono);
 }
 
+/* Graphs Section */
+.graphs-section {
+    margin-top: var(--spacing-2xl);
+    padding-top: var(--spacing-2xl);
+    border-top: 2px solid rgba(26, 31, 58, 0.1);
+}
+
+.graphs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-xl);
+}
+
+.graph-card {
+    background: var(--bg-cream);
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    border: 1px solid rgba(26, 31, 58, 0.1);
+    transition: var(--transition-base);
+}
+
+.graph-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--accent-yellow);
+}
+
+.graph-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: var(--spacing-md);
+    color: var(--primary-dark);
+    text-align: center;
+}
+
+.graph-card canvas {
+    max-height: 300px;
+    width: 100% !important;
+    height: 300px !important;
+}
+

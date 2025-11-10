@@ -161,6 +161,12 @@ def eeg_current():
         has_data = any([delta > 0, theta > 0, alpha > 0, beta > 0, gamma > 0])
         
         if has_data:
+            heart_rate = _to_float_or_none(row.get("heart_rate_bpm")) or 0.0
+            breathing_rate = _to_float_or_none(row.get("breathing_rate_bpm")) or 0.0
+            head_pitch = _to_float_or_none(row.get("head_pitch")) or 0.0
+            head_roll = _to_float_or_none(row.get("head_roll")) or 0.0
+            head_movement = _to_float_or_none(row.get("head_movement")) or 0.0
+            
             eeg_data = {
                 'timestamp': row.get("timestamp"),
                 'delta': delta,
@@ -168,11 +174,11 @@ def eeg_current():
                 'alpha': alpha,
                 'beta': beta,
                 'gamma': gamma,
-                'heart_rate_bpm': _to_float_or_none(row.get("heart_rate_bpm")),
-                'breathing_rate_bpm': _to_float_or_none(row.get("breathing_rate_bpm")),
-                'head_pitch': _to_float_or_none(row.get("head_pitch")),
-                'head_roll': _to_float_or_none(row.get("head_roll")),
-                'head_movement': _to_float_or_none(row.get("head_movement")),
+                'heart_rate_bpm': heart_rate,
+                'breathing_rate_bpm': breathing_rate,
+                'head_pitch': head_pitch,
+                'head_roll': head_roll,
+                'head_movement': head_movement,
                 'connected': True
             }
             
@@ -204,9 +210,73 @@ def eeg_current():
     })
 
 
+def calculate_advanced_metrics(eeg_data):
+    """
+    Calculate advanced metrics from EEG and physiological data.
+    Returns comprehensive metrics for better prediction accuracy.
+    """
+    delta = eeg_data.get('delta', 0.0) or 0.0
+    theta = eeg_data.get('theta', 0.0) or 0.0
+    alpha = eeg_data.get('alpha', 0.0) or 0.0
+    beta = eeg_data.get('beta', 0.0) or 0.0
+    gamma = eeg_data.get('gamma', 0.0) or 0.0
+    heart_rate = eeg_data.get('heart_rate_bpm', 0.0) or 0.0
+    breathing_rate = eeg_data.get('breathing_rate_bpm', 0.0) or 0.0
+    head_pitch = eeg_data.get('head_pitch', 0.0) or 0.0
+    
+    # Calculate total power
+    total_power = delta + theta + alpha + beta + gamma
+    if total_power == 0:
+        total_power = 1.0  # Avoid division by zero
+    
+    metrics = {
+        # Raw values
+        'delta': float(delta),
+        'theta': float(theta),
+        'alpha': float(alpha),
+        'beta': float(beta),
+        'gamma': float(gamma),
+        'heart_rate': float(heart_rate),
+        'breathing_rate': float(breathing_rate),
+        'head_pitch': float(head_pitch),
+        
+        # Normalized power (percentage of total)
+        'delta_pct': float((delta / total_power) * 100),
+        'theta_pct': float((theta / total_power) * 100),
+        'alpha_pct': float((alpha / total_power) * 100),
+        'beta_pct': float((beta / total_power) * 100),
+        'gamma_pct': float((gamma / total_power) * 100),
+        
+        # Key ratios (important for migraine detection)
+        'alpha_beta_ratio': float(alpha / (beta + 0.001)),  # Higher = more relaxed
+        'theta_alpha_ratio': float(theta / (alpha + 0.001)),  # Higher = more drowsy/stressed
+        'beta_alpha_ratio': float(beta / (alpha + 0.001)),  # Higher = more alert/stressed
+        'gamma_beta_ratio': float(gamma / (beta + 0.001)),  # Higher = more cognitive load
+        
+        # Power ratios
+        'low_freq_power': float(delta + theta),  # Low frequency power
+        'high_freq_power': float(beta + gamma),  # High frequency power
+        'low_high_ratio': float((delta + theta) / (beta + gamma + 0.001)),
+        
+        # Physiological indicators
+        'heart_rate_variability': 0.0,  # Would need historical data
+        'breathing_heart_ratio': float(breathing_rate / (heart_rate + 0.001)) if heart_rate > 0 else 0.0,
+        
+        # Stress indicators (higher values = more stress)
+        'stress_index': float((beta + gamma) / (alpha + theta + 0.001)),
+        'arousal_index': float((beta + gamma) / (alpha + 0.001)),
+        
+        # Migraine-specific indicators
+        'migraine_risk_score': 0.0,  # Will be calculated by model
+    }
+    
+    return metrics
+
+
 def predict_migraine_severity(eeg_data):
     """
     Predict migraine severity from EEG data using the trained model.
+    Uses advanced metrics for better accuracy.
     Returns prediction dict or None if model unavailable.
     """
     model, processor = load_model()
@@ -214,38 +284,59 @@ def predict_migraine_severity(eeg_data):
         return None
     
     try:
+        # Calculate advanced metrics
+        metrics = calculate_advanced_metrics(eeg_data)
+        
         # Extract frequency band values
-        delta = eeg_data.get('delta', 0.0) or 0.0
-        theta = eeg_data.get('theta', 0.0) or 0.0
-        alpha = eeg_data.get('alpha', 0.0) or 0.0
-        beta = eeg_data.get('beta', 0.0) or 0.0
-        gamma = eeg_data.get('gamma', 0.0) or 0.0
+        delta = metrics['delta']
+        theta = metrics['theta']
+        alpha = metrics['alpha']
+        beta = metrics['beta']
+        gamma = metrics['gamma']
         
         # Check if we have valid EEG data
         if all(v == 0.0 for v in [delta, theta, alpha, beta, gamma]):
             return None
         
-        # Map Muse 2 channels (TP9, AF7, AF8, TP10) to model features
-        # The model expects specific channel names. We'll use average values across channels
-        # or map to available features in the processor
+        # Map Muse 2 channels to model features
         if not hasattr(processor, 'feature_columns'):
             return None
         
-        # Create a DataFrame with the expected feature columns
-        # Use average values for all channels (simplified approach)
+        # Create feature dictionary with all available metrics
         feature_dict = {}
         for col in processor.feature_columns:
-            # Try to match column names or use average values
-            if 'delta' in col.lower():
+            col_lower = col.lower()
+            
+            # Map frequency bands
+            if 'delta' in col_lower:
                 feature_dict[col] = delta
-            elif 'theta' in col.lower():
+            elif 'theta' in col_lower:
                 feature_dict[col] = theta
-            elif 'alpha' in col.lower():
+            elif 'alpha' in col_lower:
                 feature_dict[col] = alpha
-            elif 'beta' in col.lower():
+            elif 'beta' in col_lower:
                 feature_dict[col] = beta
-            elif 'gamma' in col.lower():
+            elif 'gamma' in col_lower:
                 feature_dict[col] = gamma
+            # Map ratios
+            elif 'ratio' in col_lower or 'alpha_beta' in col_lower:
+                feature_dict[col] = metrics.get('alpha_beta_ratio', 1.0)
+            elif 'theta_alpha' in col_lower:
+                feature_dict[col] = metrics.get('theta_alpha_ratio', 1.0)
+            elif 'beta_alpha' in col_lower:
+                feature_dict[col] = metrics.get('beta_alpha_ratio', 1.0)
+            # Map percentages
+            elif 'pct' in col_lower or 'percent' in col_lower:
+                if 'delta' in col_lower:
+                    feature_dict[col] = metrics['delta_pct']
+                elif 'theta' in col_lower:
+                    feature_dict[col] = metrics['theta_pct']
+                elif 'alpha' in col_lower:
+                    feature_dict[col] = metrics['alpha_pct']
+                elif 'beta' in col_lower:
+                    feature_dict[col] = metrics['beta_pct']
+                elif 'gamma' in col_lower:
+                    feature_dict[col] = metrics['gamma_pct']
             else:
                 # Use average of all bands for unknown features
                 feature_dict[col] = (delta + theta + alpha + beta + gamma) / 5.0
@@ -266,28 +357,55 @@ def predict_migraine_severity(eeg_data):
         severity_score = model.predict(X_scaled)[0]
         severity_score = np.clip(severity_score, 0.0, 1.0)
         
+        # Calculate additional risk factors
+        stress_level = metrics['stress_index']
+        arousal_level = metrics['arousal_index']
+        heart_rate = metrics['heart_rate']
+        
+        # Adjust prediction based on physiological indicators
+        if heart_rate > 0:
+            # High heart rate can indicate stress/migraine onset
+            if heart_rate > 90:
+                severity_score = min(1.0, severity_score * 1.1)
+            elif heart_rate < 60:
+                severity_score = max(0.0, severity_score * 0.95)
+        
+        # High stress index increases risk
+        if stress_level > 2.0:
+            severity_score = min(1.0, severity_score * 1.15)
+        
         # Convert to label
         predicted_label = processor.severity_to_label(severity_score)
         
-        # Determine interpretation
+        # Determine interpretation with more detail
         if severity_score < 0.25:
             interpretation = "Non-Ictal (baseline/healthy)"
             risk_level = "low"
+            confidence = "high" if stress_level < 1.0 else "medium"
         elif severity_score < 0.75:
-            interpretation = "Preictal (pre-migraine)"
+            interpretation = "Preictal (pre-migraine warning)"
             risk_level = "medium"
+            confidence = "high" if stress_level > 1.5 else "medium"
         else:
-            interpretation = "Ictal (active migraine)"
+            interpretation = "Ictal (active migraine detected)"
             risk_level = "high"
+            confidence = "high"
         
+        # Add metrics to prediction
         return {
             'migraine_severity': float(severity_score),
             'migraine_stage': predicted_label,
             'migraine_interpretation': interpretation,
-            'migraine_risk_level': risk_level
+            'migraine_risk_level': risk_level,
+            'confidence': confidence,
+            'metrics': metrics,
+            'stress_index': float(stress_level),
+            'arousal_index': float(arousal_level),
         }
     except Exception as e:
         print(f"Error in prediction: {e}")
+        import traceback
+        traceback.print_exc()
         return None
 
 
@@ -362,6 +480,42 @@ def user_profile():
     body = request.get_json(silent=True) or {}
     # TODO: save to DB if desired
     return jsonify(success=True, received=body)
+
+
+@app.get("/api/eeg/metrics")
+def eeg_metrics():
+    """
+    Get comprehensive metrics for the latest EEG data point.
+    Includes all calculated ratios, percentages, and indices.
+    """
+    row = read_latest_row_from_rolling_csv()
+    if row:
+        delta = _to_float_or_none(row.get("delta")) or 0.0
+        theta = _to_float_or_none(row.get("theta")) or 0.0
+        alpha = _to_float_or_none(row.get("alpha")) or 0.0
+        beta = _to_float_or_none(row.get("beta")) or 0.0
+        gamma = _to_float_or_none(row.get("gamma")) or 0.0
+        
+        has_data = any([delta > 0, theta > 0, alpha > 0, beta > 0, gamma > 0])
+        
+        if has_data:
+            eeg_data = {
+                'delta': delta,
+                'theta': theta,
+                'alpha': alpha,
+                'beta': beta,
+                'gamma': gamma,
+                'heart_rate_bpm': _to_float_or_none(row.get("heart_rate_bpm")) or 0.0,
+                'breathing_rate_bpm': _to_float_or_none(row.get("breathing_rate_bpm")) or 0.0,
+                'head_pitch': _to_float_or_none(row.get("head_pitch")) or 0.0,
+            }
+            metrics = calculate_advanced_metrics(eeg_data)
+            return jsonify(metrics)
+    
+    return jsonify({
+        'error': 'No data available',
+        'connected': False
+    })
 
 
 @app.get("/api/prediction/current")

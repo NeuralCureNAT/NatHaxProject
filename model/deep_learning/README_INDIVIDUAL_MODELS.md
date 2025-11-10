@@ -14,7 +14,7 @@ Each file is **completely independent** and trains only its specific model.
 
 ### Train CNN1D Model
 ```bash
-cd MigroMinder/model/deep_learning
+cd MigraineMinder/model/deep_learning
 python train_cnn1d.py
 ```
 

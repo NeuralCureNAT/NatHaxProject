@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="MigroMinder - Intelligent migraine management using EEG signals and environmental control">
-    <title>MigroMinder | Easing the mind, one light at a time</title>
+    <meta name="description" content="MigraineMinder - Intelligent migraine management using EEG signals and environmental control">
+    <title>MigraineMinder | Easing the mind, one light at a time</title>
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
     <!-- Check if onboarding is needed -->
     <script>
         // Redirect to onboarding if not completed
-        if (!localStorage.getItem('migrominder_onboarding_complete')) {
+        if (!localStorage.getItem('migraineminder_onboarding_complete')) {
             window.location.href = 'onboarding.html';
         }
     </script>
@@ -32,7 +32,7 @@
                                   stroke="#FFC107" stroke-width="2" stroke-linecap="round"/>
                         </svg>
                     </div>
-                    <span class="logo-text">MigroMinder</span>
+                    <span class="logo-text">MigraineMinder</span>
                 </div>
                 <ul class="nav-menu">
                     <li><a href="#home">Home</a></li>
@@ -55,7 +55,7 @@
         <div class="hero-content">
             <div class="hero-badge">🧠 EEG-Powered Migraine Management</div>
             <h1>Easing the mind, <span class="hero-accent">one light at a time</span></h1>
-            <p>MigroMinder detects early migraine patterns from your brainwaves and automatically adjusts your environment. When your brain signals trouble, we dim the lights before the pain hits.</p>
+            <p>MigraineMinder detects early migraine patterns from your brainwaves and automatically adjusts your environment. When your brain signals trouble, we dim the lights before the pain hits.</p>
             <div class="hero-buttons">
                 <button class="btn btn-primary">Start Monitoring</button>
                 <button class="btn btn-secondary">View Dashboard</button>
@@ -174,7 +174,7 @@
                 <div class="card feature-card">
                     <div class="card-icon">🤖</div>
                     <h3>Personalized Learning</h3>
-                    <p>Machine learning algorithms learn which conditions precede your migraines. Over time, MigroMinder becomes more accurate and personalized to your patterns.</p>
+                    <p>Machine learning algorithms learn which conditions precede your migraines. Over time, MigraineMinder becomes more accurate and personalized to your patterns.</p>
                     <div class="feature-illustration">
                         <svg viewBox="0 0 200 150" class="illustration-svg">
                             <!-- Brain/neural network -->
@@ -325,6 +325,40 @@
                     </ul>
                 </div>
             </div>
+            
+            <!-- Real-time Graphs Section -->
+            <div class="graphs-section">
+                <div class="section-header">
+                    <h2>Real-Time Monitoring Graphs</h2>
+                    <p>Live visualization of all physiological and EEG metrics</p>
+                </div>
+                <div class="graphs-grid">
+                    <div class="graph-card">
+                        <h3>EEG Frequency Bands</h3>
+                        <canvas id="eegGraph"></canvas>
+                    </div>
+                    <div class="graph-card">
+                        <h3>Heart Rate</h3>
+                        <canvas id="heartRateGraph"></canvas>
+                    </div>
+                    <div class="graph-card">
+                        <h3>Breathing Rate</h3>
+                        <canvas id="breathingGraph"></canvas>
+                    </div>
+                    <div class="graph-card">
+                        <h3>Head Tilt (Pitch)</h3>
+                        <canvas id="headTiltGraph"></canvas>
+                    </div>
+                    <div class="graph-card">
+                        <h3>Migraine Severity Over Time</h3>
+                        <canvas id="severityGraph"></canvas>
+                    </div>
+                    <div class="graph-card">
+                        <h3>Stress & Arousal Index</h3>
+                        <canvas id="stressGraph"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -332,7 +366,7 @@
     <section id="about" class="section dark-section">
         <div class="container">
             <div class="section-header">
-                <h2>About MigroMinder</h2>
+                <h2>About MigraineMinder</h2>
                 <p>Built with empathy, powered by technology</p>
             </div>
             <div class="grid grid-2" style="max-width: 1000px; margin: 0 auto;">
@@ -363,10 +397,10 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3>MigroMinder</h3>
+                    <h3>MigraineMinder</h3>
                     <p>Easing the mind, one light at a time</p>
                     <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">
-                        MigroMinder doesn't try to stop the storm—it just knows when to turn down the lights.
+                        MigraineMinder doesn't try to stop the storm—it just knows when to turn down the lights.
                     </p>
                 </div>
                 <div class="footer-section">
@@ -381,14 +415,18 @@
                     </p>
                 </div>
             </div>
-            <p class="footer-copyright">&copy; 2024 MigroMinder. All rights reserved.</p>
+            <p class="footer-copyright">&copy; 2024 MigraineMinder. All rights reserved.</p>
         </div>
     </footer>
 
+    <!-- Chart.js for graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
     <!-- JavaScript Files -->
     <script src="js/api.js"></script>
     <script src="js/navigation.js"></script>
     <script src="js/dashboard.js"></script>
+    <script src="js/graphs.js"></script>
     <script src="js/animations.js"></script>
     <script src="js/main.js"></script>
 </body>

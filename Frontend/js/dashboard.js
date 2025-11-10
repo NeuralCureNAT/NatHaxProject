@@ -204,6 +204,16 @@ class Dashboard {
                 // Update migraine prediction
                 const prediction = await window.API.getPrediction();
                 this.updateMigrainePrediction(prediction);
+                
+                // Update real-time graphs
+                if (window.realTimeGraphs) {
+                    // Combine eegData and prediction for graphs
+                    const graphData = {
+                        ...eegData,
+                        ...prediction
+                    };
+                    window.realTimeGraphs.addDataPoint(graphData);
+                }
             } else {
                 // Show "No Data" state
                 this.updateEEGBands({ delta: null, theta: null, alpha: null, beta: null, gamma: null });

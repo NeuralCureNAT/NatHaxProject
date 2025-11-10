@@ -3,7 +3,7 @@
 ## 🚀 Run Deep Learning Pipeline
 
 ```bash
-cd MigroMinder/model/deep_learning
+cd MigraineMinder/model/deep_learning
 python train_deep_learning.py
 ```
 
