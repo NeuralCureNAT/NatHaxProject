@@ -137,10 +137,10 @@ class Dashboard {
         // Try to use real-time data first
         this.updateRealTimeData();
         
-        // Set up periodic updates every 2 seconds
+        // Set up periodic updates every 1 second for real-time visualization
         setInterval(() => {
             this.updateRealTimeData();
-        }, 2000);
+        }, 1000); // Update every 1 second for real-time feel
     }
 
     updateEnvironmentData() {
@@ -205,6 +205,9 @@ class Dashboard {
                 const prediction = await window.API.getPrediction();
                 this.updateMigrainePrediction(prediction);
                 
+                // Always update physiological metrics when we have data
+                this.updatePhysiologicalMetrics(eegData);
+                
                 // Update real-time graphs and numerical displays
                 if (window.realTimeGraphs) {
                     // Combine eegData and prediction for graphs
@@ -213,9 +216,6 @@ class Dashboard {
                         ...prediction
                     };
                     window.realTimeGraphs.addDataPoint(graphData);
-                } else {
-                    // Fallback: update numerical displays directly if graphs not initialized
-                    this.updatePhysiologicalMetrics(eegData);
                 }
             } else {
                 // Show "No Data" state
@@ -352,11 +352,14 @@ class Dashboard {
     }
 
     updatePhysiologicalMetrics(data) {
+        if (!data) return;
+        
         // Update heart rate display
         const heartRateEl = document.getElementById('heart-rate-display');
         if (heartRateEl) {
-            if (data.heart_rate_bpm && data.heart_rate_bpm > 0) {
-                heartRateEl.textContent = Math.round(data.heart_rate_bpm);
+            const hr = data.heart_rate_bpm;
+            if (hr !== null && hr !== undefined && hr > 0) {
+                heartRateEl.textContent = Math.round(hr);
             } else {
                 heartRateEl.textContent = '--';
             }
@@ -365,8 +368,9 @@ class Dashboard {
         // Update breathing rate display
         const breathingRateEl = document.getElementById('breathing-rate-display');
         if (breathingRateEl) {
-            if (data.breathing_rate_bpm && data.breathing_rate_bpm > 0) {
-                breathingRateEl.textContent = data.breathing_rate_bpm.toFixed(1);
+            const br = data.breathing_rate_bpm;
+            if (br !== null && br !== undefined && br > 0) {
+                breathingRateEl.textContent = br.toFixed(1);
             } else {
                 breathingRateEl.textContent = '--';
             }
@@ -375,8 +379,9 @@ class Dashboard {
         // Update head pitch display
         const headPitchEl = document.getElementById('head-pitch-display');
         if (headPitchEl) {
-            if (data.head_pitch !== null && data.head_pitch !== undefined) {
-                headPitchEl.textContent = data.head_pitch.toFixed(1);
+            const pitch = data.head_pitch;
+            if (pitch !== null && pitch !== undefined) {
+                headPitchEl.textContent = pitch.toFixed(1);
             } else {
                 headPitchEl.textContent = '--';
             }
@@ -385,11 +390,25 @@ class Dashboard {
         // Update head roll display
         const headRollEl = document.getElementById('head-roll-display');
         if (headRollEl) {
-            if (data.head_roll !== null && data.head_roll !== undefined) {
-                headRollEl.textContent = data.head_roll.toFixed(1);
+            const roll = data.head_roll;
+            if (roll !== null && roll !== undefined) {
+                headRollEl.textContent = roll.toFixed(1);
             } else {
                 headRollEl.textContent = '--';
             }
+        }
+        
+        // Log for debugging (only in development)
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            console.log('[Dashboard] Updated metrics:', {
+                hr: data.heart_rate_bpm,
+                br: data.breathing_rate_bpm,
+                pitch: data.head_pitch,
+                roll: data.head_roll,
+                delta: data.delta,
+                alpha: data.alpha,
+                beta: data.beta
+            });
         }
     }
 }

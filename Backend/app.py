@@ -55,8 +55,12 @@ def load_model():
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))  # Backend/
 ROOT_PARENT  = os.path.dirname(PROJECT_ROOT)                # project root
 
-# Rolling CSV written by muse2_tracker.py (e.g., data/muse2_data_processed_latest.csv)
-DATA_ROLLING = os.path.join(ROOT_PARENT, "data", "muse2_data_processed_latest.csv")
+# Rolling CSV written by muse2_tracker.py - check multiple possible locations
+DATA_ROLLING_PATHS = [
+    os.path.join(PROJECT_ROOT, "data", "muse2_data_processed_latest.csv"),  # Backend/data/
+    os.path.join(ROOT_PARENT, "data", "muse2_data_processed_latest.csv"),  # project_root/data/
+    os.path.join(PROJECT_ROOT, "muse2_data_processed_latest.csv"),  # Backend/ (fallback)
+]
 
 
 def latest_processed_csv_path():
@@ -66,8 +70,10 @@ def latest_processed_csv_path():
     Checks both Backend/ and project root.
     """
     patterns = [
+        os.path.join(PROJECT_ROOT, "data", "muse2_data_processed_*.csv"),
         os.path.join(PROJECT_ROOT, "muse2_data_processed_*.csv"),
-        os.path.join(ROOT_PARENT,  "muse2_data_processed_*.csv"),
+        os.path.join(ROOT_PARENT, "data", "muse2_data_processed_*.csv"),
+        os.path.join(ROOT_PARENT, "muse2_data_processed_*.csv"),
     ]
     matches = []
     for pat in patterns:
@@ -90,23 +96,74 @@ def _to_float_or_none(val):
 def read_latest_row_from_rolling_csv():
     """
     Read the last row from the rolling CSV at data/muse2_data_processed_latest.csv.
+    Checks multiple possible locations where muse2_tracker.py might write the file.
     Returns a dict or None if file/rows are unavailable.
     """
-    p = DATA_ROLLING
-    if not os.path.exists(p):
-        return None
-    try:
-        with open(p, newline="") as f:
-            rows = list(csv.DictReader(f))
-            return rows[-1] if rows else None
-    except Exception:
-        return None
+    # Try all possible paths
+    for p in DATA_ROLLING_PATHS:
+        if os.path.exists(p):
+            try:
+                with open(p, newline="") as f:
+                    rows = list(csv.DictReader(f))
+                    if rows:
+                        return rows[-1]
+            except Exception as e:
+                print(f"Error reading {p}: {e}")
+                continue
+    
+    # If no rolling CSV found, try timestamped files
+    latest_path = latest_processed_csv_path()
+    if latest_path and os.path.exists(latest_path):
+        try:
+            with open(latest_path, newline="") as f:
+                rows = list(csv.DictReader(f))
+                if rows:
+                    return rows[-1]
+        except Exception as e:
+            print(f"Error reading {latest_path}: {e}")
+    
+    return None
 
 
 # ---------- endpoints ----------
 @app.get("/api/health")
 def health():
     return jsonify(status="ok", time=datetime.utcnow().isoformat() + "Z")
+
+
+@app.get("/api/debug/data-source")
+def debug_data_source():
+    """
+    Debug endpoint to check where data is being read from.
+    Useful for troubleshooting data flow issues.
+    """
+    checked_paths = []
+    found_path = None
+    latest_row = None
+    
+    for p in DATA_ROLLING_PATHS:
+        exists = os.path.exists(p)
+        checked_paths.append({
+            'path': p,
+            'exists': exists,
+            'size': os.path.getsize(p) if exists else 0
+        })
+        if exists and not found_path:
+            found_path = p
+            try:
+                with open(p, newline="") as f:
+                    rows = list(csv.DictReader(f))
+                    if rows:
+                        latest_row = rows[-1]
+            except Exception as e:
+                latest_row = {'error': str(e)}
+    
+    return jsonify({
+        'checked_paths': checked_paths,
+        'found_path': found_path,
+        'latest_row': latest_row,
+        'timestamped_file': latest_processed_csv_path()
+    })
 
 
 @app.get("/api/muse/status")
@@ -150,6 +207,11 @@ def eeg_current():
     """
     row = read_latest_row_from_rolling_csv()
     if row:
+        # Debug: print what we're reading (only in development)
+        import sys
+        if sys.stdout.isatty():  # Only print if running in terminal
+            print(f"[DEBUG] Latest row timestamp: {row.get('timestamp')}")
+            print(f"[DEBUG] EEG bands - delta: {row.get('delta')}, alpha: {row.get('alpha')}, beta: {row.get('beta')}")
         # Extract EEG data
         delta = _to_float_or_none(row.get("delta")) or 0.0
         theta = _to_float_or_none(row.get("theta")) or 0.0
@@ -161,11 +223,12 @@ def eeg_current():
         has_data = any([delta > 0, theta > 0, alpha > 0, beta > 0, gamma > 0])
         
         if has_data:
-            heart_rate = _to_float_or_none(row.get("heart_rate_bpm")) or 0.0
-            breathing_rate = _to_float_or_none(row.get("breathing_rate_bpm")) or 0.0
-            head_pitch = _to_float_or_none(row.get("head_pitch")) or 0.0
-            head_roll = _to_float_or_none(row.get("head_roll")) or 0.0
-            head_movement = _to_float_or_none(row.get("head_movement")) or 0.0
+            # Extract physiological data - use None for empty/missing values instead of 0.0
+            heart_rate = _to_float_or_none(row.get("heart_rate_bpm"))
+            breathing_rate = _to_float_or_none(row.get("breathing_rate_bpm"))
+            head_pitch = _to_float_or_none(row.get("head_pitch"))
+            head_roll = _to_float_or_none(row.get("head_roll"))
+            head_movement = _to_float_or_none(row.get("head_movement"))
             
             eeg_data = {
                 'timestamp': row.get("timestamp"),
@@ -174,11 +237,11 @@ def eeg_current():
                 'alpha': alpha,
                 'beta': beta,
                 'gamma': gamma,
-                'heart_rate_bpm': heart_rate,
-                'breathing_rate_bpm': breathing_rate,
-                'head_pitch': head_pitch,
-                'head_roll': head_roll,
-                'head_movement': head_movement,
+                'heart_rate_bpm': heart_rate if heart_rate is not None else None,
+                'breathing_rate_bpm': breathing_rate if breathing_rate is not None else None,
+                'head_pitch': head_pitch if head_pitch is not None else None,
+                'head_roll': head_roll if head_roll is not None else None,
+                'head_movement': head_movement if head_movement is not None else None,
                 'connected': True
             }
             
@@ -187,10 +250,15 @@ def eeg_current():
             if prediction:
                 eeg_data.update(prediction)
             
-            return jsonify(eeg_data)
+            response = jsonify(eeg_data)
+            # Add headers to prevent caching for real-time data
+            response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+            response.headers['Pragma'] = 'no-cache'
+            response.headers['Expires'] = '0'
+            return response
     
     # Return null/empty data when Muse 2 is not connected
-    return jsonify({
+    response = jsonify({
         'connected': False,
         'timestamp': None,
         'delta': None,
@@ -208,6 +276,11 @@ def eeg_current():
         'migraine_interpretation': 'Connect Muse 2 to see predictions',
         'migraine_risk_level': None
     })
+    # Add headers to prevent caching
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
 
 
 def calculate_advanced_metrics(eeg_data):
@@ -546,15 +619,25 @@ def prediction_current():
             prediction = predict_migraine_severity(eeg_data)
             if prediction:
                 prediction['connected'] = True
-                return jsonify(prediction)
+                response = jsonify(prediction)
+                # Add headers to prevent caching for real-time data
+                response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+                response.headers['Pragma'] = 'no-cache'
+                response.headers['Expires'] = '0'
+                return response
     
-    return jsonify({
+    response = jsonify({
         'connected': False,
         'migraine_severity': None,
         'migraine_stage': None,
         'migraine_interpretation': 'Connect Muse 2 to see predictions',
         'migraine_risk_level': None
     })
+    # Add headers to prevent caching
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
 
 
 if __name__ == "__main__":

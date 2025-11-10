@@ -5,7 +5,7 @@
 
 class RealTimeGraphs {
     constructor() {
-        this.maxDataPoints = 60; // Show last 60 data points (2 minutes at 2s intervals)
+        this.maxDataPoints = 120; // Show last 120 data points (2 minutes at 1s intervals)
         this.dataHistory = {
             timestamps: [],
             delta: [],
@@ -103,7 +103,10 @@ class RealTimeGraphs {
                     }
                 },
                 animation: {
-                    duration: 0
+                    duration: 0 // No animation for real-time updates
+                },
+                interaction: {
+                    intersect: false
                 }
             }
         });
@@ -115,18 +118,37 @@ class RealTimeGraphs {
             return; // Don't add data if not connected
         }
 
-        const timestamp = data.timestamp ? new Date(data.timestamp).toLocaleTimeString() : new Date().toLocaleTimeString();
+        // Use more precise timestamp format for better real-time tracking
+        const now = new Date();
+        const timestamp = data.timestamp 
+            ? new Date(data.timestamp).toLocaleTimeString() 
+            : `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
         
-        // Add to history
-        this.dataHistory.timestamps.push(timestamp);
-        this.dataHistory.delta.push(data.delta || 0);
-        this.dataHistory.theta.push(data.theta || 0);
-        this.dataHistory.alpha.push(data.alpha || 0);
-        this.dataHistory.beta.push(data.beta || 0);
-        this.dataHistory.gamma.push(data.gamma || 0);
-        this.dataHistory.heartRate.push(data.heart_rate_bpm || 0);
-        this.dataHistory.breathingRate.push(data.breathing_rate_bpm || 0);
-        this.dataHistory.headPitch.push(data.head_pitch || 0);
+        // Only add if data has changed (avoid duplicate points)
+        const lastTimestamp = this.dataHistory.timestamps[this.dataHistory.timestamps.length - 1];
+        if (lastTimestamp === timestamp && this.dataHistory.timestamps.length > 0) {
+            // Update the last point instead of adding a new one
+            const lastIndex = this.dataHistory.timestamps.length - 1;
+            this.dataHistory.delta[lastIndex] = data.delta || 0;
+            this.dataHistory.theta[lastIndex] = data.theta || 0;
+            this.dataHistory.alpha[lastIndex] = data.alpha || 0;
+            this.dataHistory.beta[lastIndex] = data.beta || 0;
+            this.dataHistory.gamma[lastIndex] = data.gamma || 0;
+            this.dataHistory.heartRate[lastIndex] = data.heart_rate_bpm || 0;
+            this.dataHistory.breathingRate[lastIndex] = data.breathing_rate_bpm || 0;
+            this.dataHistory.headPitch[lastIndex] = data.head_pitch || 0;
+        } else {
+            // Add new data point
+            this.dataHistory.timestamps.push(timestamp);
+            this.dataHistory.delta.push(data.delta || 0);
+            this.dataHistory.theta.push(data.theta || 0);
+            this.dataHistory.alpha.push(data.alpha || 0);
+            this.dataHistory.beta.push(data.beta || 0);
+            this.dataHistory.gamma.push(data.gamma || 0);
+            this.dataHistory.heartRate.push(data.heart_rate_bpm || 0);
+            this.dataHistory.breathingRate.push(data.breathing_rate_bpm || 0);
+            this.dataHistory.headPitch.push(data.head_pitch || 0);
+        }
         
         // Update numerical displays
         this.updateNumericalDisplays(data);
@@ -144,14 +166,14 @@ class RealTimeGraphs {
             this.dataHistory.headPitch.shift();
         }
 
-        // Update all charts
+        // Update all charts immediately
         this.updateCharts();
     }
 
     updateCharts() {
         const labels = this.dataHistory.timestamps;
 
-        // Update EEG graph
+        // Update EEG graph with 'none' mode for instant updates
         if (this.charts.eeg) {
             this.charts.eeg.data.labels = labels;
             this.charts.eeg.data.datasets[0].data = this.dataHistory.delta;
@@ -159,6 +181,7 @@ class RealTimeGraphs {
             this.charts.eeg.data.datasets[2].data = this.dataHistory.alpha;
             this.charts.eeg.data.datasets[3].data = this.dataHistory.beta;
             this.charts.eeg.data.datasets[4].data = this.dataHistory.gamma;
+            // Use 'none' mode for instant updates without animation
             this.charts.eeg.update('none');
         }
     }

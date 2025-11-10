@@ -17,8 +17,14 @@ class API {
 
   // Small helper to avoid repeating ok checks
   async fetchJSON(path, options = {}) {
-    const res = await fetch(`${this.baseURL}${path}`, {
+    // Add cache-busting timestamp for real-time data endpoints
+    const cacheBuster = path.includes('/eeg/current') || path.includes('/prediction/current') || path.includes('/muse/status')
+      ? `?t=${Date.now()}`
+      : '';
+    
+    const res = await fetch(`${this.baseURL}${path}${cacheBuster}`, {
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      cache: 'no-cache', // Prevent browser caching for real-time data
       ...options,
     });
     if (!res.ok) {
