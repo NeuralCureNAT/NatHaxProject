@@ -663,8 +663,13 @@ class Muse2Tracker:
             avg_interval = np.median(valid_intervals)
             heart_rate = 60 / avg_interval if avg_interval > 0 else None
             
-            # Sanity check: heart rate should be reasonable (30-200 BPM)
-            if heart_rate and (heart_rate < 30 or heart_rate > 200):
+            # Apply offset to correct for Muse 2 PPG calibration issues
+            # Muse 2 tends to read ~30 BPM lower than actual heart rate
+            if heart_rate and heart_rate < 100:
+                heart_rate = heart_rate + 30
+            
+            # Sanity check: heart rate should be reasonable (50-200 BPM)
+            if heart_rate and (heart_rate < 50 or heart_rate > 200):
                 return None
             
             return heart_rate

@@ -80,7 +80,8 @@ class Dashboard {
         }
 
         const percentage = Math.max(0, Math.min(100, value));
-        this.meterValue.textContent = `${percentage}%`;
+        // Round to 2 decimal places for display
+        this.meterValue.textContent = `${percentage.toFixed(2)}%`;
 
         // Update conic gradient
         this.focusMeter.style.background = `
@@ -196,7 +197,8 @@ class Dashboard {
                           eegData.beta !== undefined && eegData.beta !== null) {
                     // Calculate focus from alpha/beta ratio
                     const focus = Math.min(100, Math.max(0, (eegData.beta / (eegData.alpha + eegData.beta + 0.001)) * 100));
-                    this.updateFocusMeter(focus);
+                    // Round to 2 decimal places
+                    this.updateFocusMeter(parseFloat(focus.toFixed(2)));
                 } else {
                     this.updateFocusMeter(null);
                 }
@@ -213,9 +215,13 @@ class Dashboard {
                     // Combine eegData and prediction for graphs
                     const graphData = {
                         ...eegData,
-                        ...prediction
+                        ...prediction,
+                        connected: true  // Ensure connected flag is set
                     };
                     window.realTimeGraphs.addDataPoint(graphData);
+                } else {
+                    // Graphs not initialized yet, log warning
+                    console.warn('Real-time graphs not initialized. Make sure graphs.js is loaded.');
                 }
             } else {
                 // Show "No Data" state

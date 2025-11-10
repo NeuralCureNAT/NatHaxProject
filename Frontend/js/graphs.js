@@ -114,8 +114,35 @@ class RealTimeGraphs {
 
 
     addDataPoint(data) {
-        if (!data || !data.connected) {
-            return; // Don't add data if not connected
+        // Check if we have valid data (either connected flag or actual EEG values)
+        if (!data) {
+            return; // Don't add data if null/undefined
+        }
+        
+        // Check if we have actual EEG data (at least one band has a value, even if small)
+        const hasEEGData = (data.delta !== null && data.delta !== undefined) || 
+                          (data.theta !== null && data.theta !== undefined) || 
+                          (data.alpha !== null && data.alpha !== undefined) || 
+                          (data.beta !== null && data.beta !== undefined) || 
+                          (data.gamma !== null && data.gamma !== undefined);
+        
+        // Allow data if connected OR if we have actual EEG values (even if zero)
+        if (!data.connected && !hasEEGData) {
+            return; // Don't add data if not connected and no EEG data
+        }
+        
+        // Log for debugging (only in development)
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            if (this.dataHistory.timestamps.length % 10 === 0) { // Log every 10th point
+                console.log('[Graphs] Adding data point:', {
+                    connected: data.connected,
+                    hasEEGData: hasEEGData,
+                    delta: data.delta,
+                    alpha: data.alpha,
+                    beta: data.beta,
+                    timestamp: data.timestamp
+                });
+            }
         }
 
         // Use more precise timestamp format for better real-time tracking
@@ -175,14 +202,26 @@ class RealTimeGraphs {
 
         // Update EEG graph with 'none' mode for instant updates
         if (this.charts.eeg) {
-            this.charts.eeg.data.labels = labels;
-            this.charts.eeg.data.datasets[0].data = this.dataHistory.delta;
-            this.charts.eeg.data.datasets[1].data = this.dataHistory.theta;
-            this.charts.eeg.data.datasets[2].data = this.dataHistory.alpha;
-            this.charts.eeg.data.datasets[3].data = this.dataHistory.beta;
-            this.charts.eeg.data.datasets[4].data = this.dataHistory.gamma;
-            // Use 'none' mode for instant updates without animation
-            this.charts.eeg.update('none');
+            // Ensure we have data to display
+            if (labels.length > 0) {
+                this.charts.eeg.data.labels = labels;
+                this.charts.eeg.data.datasets[0].data = this.dataHistory.delta;
+                this.charts.eeg.data.datasets[1].data = this.dataHistory.theta;
+                this.charts.eeg.data.datasets[2].data = this.dataHistory.alpha;
+                this.charts.eeg.data.datasets[3].data = this.dataHistory.beta;
+                this.charts.eeg.data.datasets[4].data = this.dataHistory.gamma;
+                
+                // Use 'none' mode for instant updates without animation
+                try {
+                    this.charts.eeg.update('none');
+                } catch (error) {
+                    console.error('Error updating EEG graph:', error);
+                }
+            }
+        } else {
+            // Graph not initialized, try to initialize it
+            console.warn('EEG graph not initialized, attempting to initialize...');
+            this.setupEEGGraph();
         }
     }
 

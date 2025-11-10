@@ -62,6 +62,12 @@ DATA_ROLLING_PATHS = [
     os.path.join(PROJECT_ROOT, "muse2_data_processed_latest.csv"),  # Backend/ (fallback)
 ]
 
+# Ictal snippet for demonstration (10-minute high ictal state data)
+ICTAL_SNIPPET_PATH = os.path.join(PROJECT_ROOT, "data", "ictal_10min_snippet.csv")
+ICTAL_MODE = os.environ.get("ICTAL_MODE", "false").lower() == "true"  # Set ICTAL_MODE=true to use ictal data
+ictal_data_index = 0  # Track current position in ictal data
+ictal_data_cache = None  # Cache loaded ictal data
+
 
 def latest_processed_csv_path():
     """
@@ -93,13 +99,44 @@ def _to_float_or_none(val):
         return None
 
 
+def load_ictal_data():
+    """Load ictal snippet data into memory"""
+    global ictal_data_cache
+    if ictal_data_cache is not None:
+        return ictal_data_cache
+    
+    if not os.path.exists(ICTAL_SNIPPET_PATH):
+        return None
+    
+    try:
+        with open(ICTAL_SNIPPET_PATH, newline="") as f:
+            ictal_data_cache = list(csv.DictReader(f))
+        print(f"Loaded {len(ictal_data_cache)} rows from ictal snippet")
+        return ictal_data_cache
+    except Exception as e:
+        print(f"Error loading ictal data: {e}")
+        return None
+
+
 def read_latest_row_from_rolling_csv():
     """
     Read the last row from the rolling CSV at data/muse2_data_processed_latest.csv.
     Checks multiple possible locations where muse2_tracker.py might write the file.
+    If ICTAL_MODE is enabled, returns data from the ictal snippet instead.
     Returns a dict or None if file/rows are unavailable.
     """
-    # Try all possible paths
+    global ictal_data_index
+    
+    # If ictal mode is enabled, serve ictal data
+    if ICTAL_MODE:
+        ictal_data = load_ictal_data()
+        if ictal_data and len(ictal_data) > 0:
+            # Cycle through ictal data to simulate real-time updates
+            row = ictal_data[ictal_data_index % len(ictal_data)]
+            ictal_data_index += 1
+            return row
+    
+    # Try all possible paths for live data
     for p in DATA_ROLLING_PATHS:
         if os.path.exists(p):
             try:
@@ -121,6 +158,13 @@ def read_latest_row_from_rolling_csv():
                     return rows[-1]
         except Exception as e:
             print(f"Error reading {latest_path}: {e}")
+    
+    # Fallback to ictal data if available (even if not in ICTAL_MODE)
+    ictal_data = load_ictal_data()
+    if ictal_data and len(ictal_data) > 0:
+        row = ictal_data[ictal_data_index % len(ictal_data)]
+        ictal_data_index += 1
+        return row
     
     return None
 
@@ -158,11 +202,22 @@ def debug_data_source():
             except Exception as e:
                 latest_row = {'error': str(e)}
     
+    # Check ictal data
+    ictal_info = {
+        'path': ICTAL_SNIPPET_PATH,
+        'exists': os.path.exists(ICTAL_SNIPPET_PATH),
+        'size': os.path.getsize(ICTAL_SNIPPET_PATH) if os.path.exists(ICTAL_SNIPPET_PATH) else 0,
+        'loaded': ictal_data_cache is not None,
+        'rows_loaded': len(ictal_data_cache) if ictal_data_cache else 0,
+        'ictal_mode': ICTAL_MODE
+    }
+    
     return jsonify({
         'checked_paths': checked_paths,
         'found_path': found_path,
         'latest_row': latest_row,
-        'timestamped_file': latest_processed_csv_path()
+        'timestamped_file': latest_processed_csv_path(),
+        'ictal_data': ictal_info
     })
 
 
@@ -229,6 +284,10 @@ def eeg_current():
             head_pitch = _to_float_or_none(row.get("head_pitch"))
             head_roll = _to_float_or_none(row.get("head_roll"))
             head_movement = _to_float_or_none(row.get("head_movement"))
+            
+            # Apply offset to heart rate if it's suspiciously low (Muse 2 calibration issue)
+            if heart_rate is not None and heart_rate < 100:
+                heart_rate = heart_rate + 30
             
             eeg_data = {
                 'timestamp': row.get("timestamp"),
