@@ -2,6 +2,29 @@
    Dashboard Styles
    ============================================ */
 
+/* Muse Connection Status Indicator */
+.muse-status-indicator {
+    padding: var(--spacing-md);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--spacing-lg);
+    text-align: center;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: var(--transition-base);
+}
+
+.muse-status-indicator.connected {
+    background: rgba(56, 161, 105, 0.1);
+    color: var(--success);
+    border: 2px solid var(--success);
+}
+
+.muse-status-indicator.disconnected {
+    background: rgba(229, 62, 62, 0.1);
+    color: var(--danger);
+    border: 2px solid var(--danger);
+}
+
 .dashboard-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -199,5 +222,142 @@
         transform: scale(1.1);
         opacity: 0.5;
     }
+}
+
+/* Migraine Prediction Card */
+.migraine-prediction {
+    grid-column: span 1;
+}
+
+.prediction-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    align-items: center;
+}
+
+.prediction-severity {
+    text-align: center;
+}
+
+.severity-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--accent-yellow);
+    margin-bottom: var(--spacing-xs);
+}
+
+.severity-label {
+    font-size: 0.875rem;
+    color: var(--text-gray);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.prediction-stage {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    justify-content: center;
+}
+
+.stage-label {
+    font-size: 0.9rem;
+    color: var(--text-gray);
+    font-weight: 600;
+}
+
+.stage-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-md);
+    background: var(--bg-light-beige);
+    color: var(--text-dark);
+}
+
+.stage-value.low {
+    background: rgba(56, 161, 105, 0.1);
+    color: var(--success);
+}
+
+.stage-value.medium {
+    background: rgba(255, 193, 7, 0.1);
+    color: var(--warning);
+}
+
+.stage-value.high {
+    background: rgba(229, 62, 62, 0.1);
+    color: var(--danger);
+}
+
+.prediction-interpretation {
+    font-size: 0.95rem;
+    color: var(--text-gray);
+    text-align: center;
+    line-height: 1.5;
+}
+
+.risk-indicator {
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.risk-indicator.low {
+    background: rgba(56, 161, 105, 0.15);
+    color: var(--success);
+}
+
+.risk-indicator.medium {
+    background: rgba(255, 193, 7, 0.15);
+    color: var(--warning);
+}
+
+.risk-indicator.high {
+    background: rgba(229, 62, 62, 0.15);
+    color: var(--danger);
+}
+
+.risk-indicator.unknown {
+    background: rgba(74, 85, 104, 0.15);
+    color: var(--text-gray);
+}
+
+/* EEG Bands Card */
+.eeg-bands {
+    grid-column: span 1;
+}
+
+.bands-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.band-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-sm);
+    background: var(--bg-light-beige);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(26, 31, 58, 0.1);
+}
+
+.band-name {
+    font-size: 0.9rem;
+    color: var(--text-gray);
+    font-weight: 500;
+}
+
+.band-value {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+    font-family: var(--font-mono);
 }
 

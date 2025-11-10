@@ -282,6 +282,24 @@ function completeOnboarding() {
     onboarding.completeOnboarding();
 }
 
+function handleNoMuse2(element) {
+    // Show prompt to wear Muse 2
+    const response = confirm(
+        "MigroMinder works best with real-time EEG data from a Muse 2 headband.\n\n" +
+        "Please wear your Muse 2 headband and ensure it's connected before continuing.\n\n" +
+        "If you don't have a Muse 2, you can still use demo mode, but predictions will be limited.\n\n" +
+        "Do you want to continue anyway?"
+    );
+    
+    if (response) {
+        // User wants to continue without Muse 2
+        onboarding.selectOption('hardware', 'no', element);
+    } else {
+        // User wants to go back and wear Muse 2
+        alert("Please wear your Muse 2 headband and ensure it's connected, then try again.");
+    }
+}
+
 // Keyboard navigation
 document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight' || e.key === 'Enter') {

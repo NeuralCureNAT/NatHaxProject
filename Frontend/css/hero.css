@@ -3,7 +3,7 @@
    ============================================ */
 
 .hero {
-    background: var(--gradient-hero);
+    background: var(--bg-light-beige);
     position: relative;
     padding: var(--spacing-2xl) var(--spacing-lg);
     min-height: 90vh;
@@ -11,7 +11,8 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    color: white;
+    color: var(--text-dark);
+    border-bottom: 1px solid rgba(26, 31, 58, 0.1);
 }
 
 .hero::before {
@@ -22,7 +23,7 @@
     right: 0;
     bottom: 0;
     background: 
-        radial-gradient(circle at 20% 50%, rgba(255, 193, 7, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 20% 50%, rgba(255, 193, 7, 0.08) 0%, transparent 50%),
         radial-gradient(circle at 80% 50%, rgba(255, 193, 7, 0.05) 0%, transparent 50%);
     pointer-events: none;
 }
@@ -36,15 +37,15 @@
 
 .hero-badge {
     display: inline-block;
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(26, 31, 58, 0.08);
     backdrop-filter: blur(10px);
     padding: var(--spacing-xs) var(--spacing-md);
     border-radius: var(--radius-full);
     font-size: 0.875rem;
     font-weight: 600;
     margin-bottom: var(--spacing-lg);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: white;
+    border: 1px solid rgba(26, 31, 58, 0.15);
+    color: var(--text-dark);
 }
 
 .hero-content h1 {
@@ -52,7 +53,7 @@
     font-weight: 800;
     line-height: 1.1;
     margin-bottom: var(--spacing-md);
-    color: white;
+    color: var(--text-dark);
 }
 
 .hero-accent {
@@ -65,7 +66,7 @@
     margin-bottom: var(--spacing-xl);
     opacity: 0.95;
     line-height: 1.7;
-    color: rgba(255, 255, 255, 0.95);
+    color: var(--text-gray);
 }
 
 .hero-buttons {
@@ -84,12 +85,13 @@
 }
 
 .stat-card {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.6);
     backdrop-filter: blur(10px);
     padding: var(--spacing-md);
     border-radius: var(--radius-lg);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(26, 31, 58, 0.1);
     text-align: center;
+    box-shadow: var(--shadow-sm);
 }
 
 .stat-value {
@@ -101,7 +103,7 @@
 
 .stat-label {
     font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--text-gray);
     text-transform: uppercase;
     letter-spacing: 1px;
 }

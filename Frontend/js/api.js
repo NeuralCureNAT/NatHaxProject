@@ -6,8 +6,8 @@
 
 class API {
   constructor() {
-    // Update this if your Flask server lives elsewhere
-    this.baseURL = 'http://localhost:5000/api';
+    // Backend runs on port 5050 by default (see Backend/app.py)
+    this.baseURL = 'http://localhost:5050/api';
     this.init();
   }
 
@@ -39,13 +39,55 @@ class API {
     }
   }
 
+  // Check Muse 2 connection status
+  async getMuseStatus() {
+    try {
+      return await this.fetchJSON('/muse/status');
+    } catch (error) {
+      console.error('Error checking Muse status:', error);
+      return {
+        connected: false,
+        has_data: false,
+        message: 'Backend not available'
+      };
+    }
+  }
+
   // Get real-time EEG data from Muse 2
   async getEEGData() {
     try {
-      return await this.fetchJSON('/eeg/current');
+      const data = await this.fetchJSON('/eeg/current');
+      // Don't return mock data - return actual data or null
+      return data;
     } catch (error) {
       console.error('Error fetching EEG data:', error);
-      return this.getMockEEGData();
+      // Return null data instead of mock
+      return {
+        connected: false,
+        timestamp: null,
+        delta: null,
+        theta: null,
+        alpha: null,
+        beta: null,
+        gamma: null
+      };
+    }
+  }
+
+  // Get current migraine prediction
+  async getPrediction() {
+    try {
+      const data = await this.fetchJSON('/prediction/current');
+      return data;
+    } catch (error) {
+      console.error('Error fetching prediction:', error);
+      return {
+        connected: false,
+        migraine_severity: null,
+        migraine_stage: null,
+        migraine_interpretation: 'Connect Muse 2 to see predictions',
+        migraine_risk_level: null
+      };
     }
   }
 
@@ -108,15 +150,7 @@ class API {
     }
   }
 
-  // -------- Mock data for development/testing --------
-  getMockEEGData() {
-    return {
-      focus: Math.floor(Math.random() * 30) + 70,
-      attention: Math.floor(Math.random() * 20) + 60,
-      meditation: Math.floor(Math.random() * 25) + 50,
-      timestamp: new Date().toISOString(),
-    };
-  }
+  // -------- Removed mock data - only show real data --------
 
   getMockMigraineHistory() {
     return [
