@@ -1,7 +1,7 @@
 # 🧠 MigraineMinder
 
 <p align="center">
-  <img src="./images/migrominder_logo.png" alt="MigraineMinder Logo" width="400"/>
+  <img src="./images/migrainelogo.png" alt="MigraineMinder Logo" width="400"/>
 </p>
 
 ---
