@@ -25,16 +25,30 @@ class EEGDataProcessor:
         # Severity mapping: nonictal=0.0, preictal=0.5, ictal=1.0
         self.severity_map = {'nonictal': 0.0, 'preictal': 0.5, 'ictal': 1.0}
         
-    def load_data(self, ictal_path, preictal_path):
-        """Load and combine ictal and preictal data"""
+    def load_data(self, ictal_path, preictal_path, sample_rate=1):
+        """
+        Load and combine ictal and preictal data
+        
+        Args:
+            ictal_path: Path to ictal CSV file
+            preictal_path: Path to preictal CSV file
+            sample_rate: Sample every Nth row (1=all rows, 10=every 10th row, etc.)
+                        Higher values = faster but less data. Recommended: 100-1000 for large datasets
+        """
         print("Loading EEG data...")
+        if sample_rate > 1:
+            print(f"Sampling: Using every {sample_rate}th row (reducing dataset by {sample_rate}x)")
         
         # Load ictal data
-        ictal_df = pd.read_excel(ictal_path)
+        ictal_df = pd.read_csv(ictal_path)
+        if sample_rate > 1:
+            ictal_df = ictal_df.iloc[::sample_rate].reset_index(drop=True)
         print(f"Ictal data shape: {ictal_df.shape}")
         
         # Load preictal data
-        preictal_df = pd.read_excel(preictal_path)
+        preictal_df = pd.read_csv(preictal_path)
+        if sample_rate > 1:
+            preictal_df = preictal_df.iloc[::sample_rate].reset_index(drop=True)
         print(f"Preictal data shape: {preictal_df.shape}")
         
         return ictal_df, preictal_df
@@ -230,7 +244,7 @@ def main():
     processor = EEGDataProcessor()
     
     # Load data
-    ictal_df, preictal_df = processor.load_data('raw_ictal.xlsx', 'raw_preictal.xlsx')
+    ictal_df, preictal_df = processor.load_data('chbmit_ictal_raw_data.csv', 'chbmit_preictal_raw_data.csv', sample_rate=100)
     
     # Clean data
     clean_data, labels, channels = processor.clean_data(ictal_df, preictal_df)
