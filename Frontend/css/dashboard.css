@@ -125,42 +125,6 @@
     font-weight: 700;
 }
 
-/* Environment Metrics */
-.env-metric {
-    display: flex;
-    justify-content: space-between;
-    padding: var(--spacing-sm) 0;
-    border-bottom: 1px solid rgba(26, 31, 58, 0.1);
-}
-
-.env-metric:last-child {
-    border-bottom: none;
-}
-
-.env-metric span {
-    color: var(--text-gray);
-}
-
-.env-metric strong {
-    color: var(--success);
-    font-weight: 600;
-}
-
-/* Recommendations List */
-.recommendations-list {
-    list-style: none;
-}
-
-.recommendations-list li {
-    padding: var(--spacing-sm) 0;
-    color: var(--text-gray);
-    border-bottom: 1px solid rgba(26, 31, 58, 0.1);
-    line-height: 1.6;
-}
-
-.recommendations-list li:last-child {
-    border-bottom: none;
-}
 
 /* Process Steps */
 .process-steps {

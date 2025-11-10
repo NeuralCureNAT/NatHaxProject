@@ -53,26 +53,18 @@
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-content">
+            <div class="hero-quote">
+                <blockquote>
+                    "Migraine affects over 1 billion people worldwide, yet early detection can reduce severity by up to 80%."
+                </blockquote>
+                <cite>— World Health Organization</cite>
+            </div>
             <div class="hero-badge">🧠 EEG-Powered Migraine Management</div>
             <h1>Easing the mind, <span class="hero-accent">one light at a time</span></h1>
             <p>MigraineMinder detects early migraine patterns from your brainwaves and automatically adjusts your environment. When your brain signals trouble, we dim the lights before the pain hits.</p>
             <div class="hero-buttons">
                 <button class="btn btn-primary">Start Monitoring</button>
                 <button class="btn btn-secondary">View Dashboard</button>
-            </div>
-            <div class="hero-stats">
-                <div class="stat-card">
-                    <div class="stat-value">92%</div>
-                    <div class="stat-label">Detection Accuracy</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">3.2s</div>
-                    <div class="stat-label">Avg Response Time</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">24/7</div>
-                    <div class="stat-label">Real-time Monitoring</div>
-                </div>
             </div>
         </div>
     </section>
@@ -89,102 +81,24 @@
                     <div class="card-icon">🧠</div>
                     <h3>EEG Pattern Detection</h3>
                     <p>Real-time analysis of Muse 2 EEG signals to identify early neurological signatures of migraine onset. Detects stress, focus drops, and HRV changes before symptoms appear.</p>
-                    <div class="feature-illustration">
-                        <svg viewBox="0 0 200 150" class="illustration-svg">
-                            <!-- Anime figure with EEG headband -->
-                            <circle cx="100" cy="50" r="22" fill="#FFDBAC"/>
-                            <path d="M 78 40 Q 70 30 75 25 Q 85 20 100 23 Q 115 20 125 25 Q 130 30 122 40" fill="#4A3728"/>
-                            <!-- EEG headband -->
-                            <ellipse cx="100" cy="50" rx="30" ry="20" fill="none" stroke="#1A1F3A" stroke-width="3"/>
-                            <circle cx="85" cy="45" r="3" fill="#FFC107"/>
-                            <circle cx="100" cy="45" r="3" fill="#FFC107"/>
-                            <circle cx="115" cy="45" r="3" fill="#FFC107"/>
-                            <!-- Brain waves -->
-                            <path d="M 60 70 Q 70 60 80 70 Q 90 80 100 70 Q 110 60 120 70 Q 130 80 140 70" 
-                                  stroke="#FFC107" stroke-width="2" fill="none"/>
-                            <rect x="88" y="72" width="24" height="35" rx="8" fill="#1A1F3A"/>
-                        </svg>
-                    </div>
                 </div>
 
                 <div class="card feature-card">
                     <div class="card-icon">💡</div>
                     <h3>Automatic Light Control</h3>
                     <p>Arduino-controlled LED module automatically dims ambient lighting or prompts screen brightness reduction when migraine patterns are detected. Reacts faster than you can.</p>
-                    <div class="feature-illustration">
-                        <svg viewBox="0 0 200 150" class="illustration-svg">
-                            <!-- Lightbulb -->
-                            <circle cx="100" cy="60" r="25" fill="#FFC107" opacity="0.9"/>
-                            <rect x="95" y="85" width="10" height="15" fill="#1A1F3A"/>
-                            <!-- Light rays -->
-                            <path d="M 100 35 L 85 50 M 100 35 L 115 50 M 75 60 L 90 70 M 125 60 L 110 70" 
-                                  stroke="#FFC107" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-                            <!-- Dimmed background -->
-                            <rect x="40" y="100" width="120" height="8" fill="#4A5568" opacity="0.5"/>
-                        </svg>
-                    </div>
                 </div>
 
                 <div class="card feature-card">
                     <div class="card-icon">📊</div>
                     <h3>Trigger Logging & Analytics</h3>
                     <p>Log contextual causes—stress, noise, caffeine, weather, coursework. Visualize EEG trends, trigger frequency, and environment correlations to identify patterns.</p>
-                    <div class="feature-illustration">
-                        <svg viewBox="0 0 200 150" class="illustration-svg">
-                            <!-- Chart/graph -->
-                            <path d="M 40 120 L 60 100 L 80 110 L 100 80 L 120 90 L 140 70 L 160 75" 
-                                  stroke="#1A1F3A" stroke-width="3" fill="none" stroke-linecap="round"/>
-                            <circle cx="100" cy="80" r="5" fill="#FFC107"/>
-                            <!-- Data points -->
-                            <circle cx="60" cy="100" r="4" fill="#FFC107"/>
-                            <circle cx="140" cy="70" r="4" fill="#FFC107"/>
-                        </svg>
-                    </div>
-                </div>
-
-                <div class="card feature-card">
-                    <div class="card-icon">🌡️</div>
-                    <h3>Environment Monitoring</h3>
-                    <p>DHT11 sensor tracks temperature and humidity. LDR monitors ambient light. Correlates environmental factors with migraine episodes to identify triggers.</p>
-                    <div class="feature-illustration">
-                        <svg viewBox="0 0 200 150" class="illustration-svg">
-                            <!-- Temperature/humidity display -->
-                            <rect x="80" y="60" width="40" height="50" rx="5" fill="#1A1F3A"/>
-                            <text x="100" y="85" font-size="16" fill="#FFC107" text-anchor="middle" font-weight="bold">22°C</text>
-                            <text x="100" y="100" font-size="12" fill="#FFC107" text-anchor="middle">65%</text>
-                        </svg>
-                    </div>
                 </div>
 
                 <div class="card feature-card">
                     <div class="card-icon">📱</div>
                     <h3>Interactive Dashboard</h3>
-                    <p>Flask/React.js dashboard for real-time monitoring, event logging, and data visualization. Clean interface that looks great even at 20% brightness.</p>
-                    <div class="feature-illustration">
-                        <svg viewBox="0 0 200 150" class="illustration-svg">
-                            <!-- Dashboard mockup -->
-                            <rect x="50" y="50" width="100" height="60" rx="5" fill="#1A1F3A"/>
-                            <rect x="60" y="60" width="30" height="15" rx="2" fill="#FFC107"/>
-                            <rect x="95" y="60" width="30" height="15" rx="2" fill="#FFC107"/>
-                            <rect x="60" y="80" width="65" height="20" rx="2" fill="#2C3E6F"/>
-                        </svg>
-                    </div>
-                </div>
-
-                <div class="card feature-card">
-                    <div class="card-icon">🤖</div>
-                    <h3>Personalized Learning</h3>
-                    <p>Machine learning algorithms learn which conditions precede your migraines. Over time, MigraineMinder becomes more accurate and personalized to your patterns.</p>
-                    <div class="feature-illustration">
-                        <svg viewBox="0 0 200 150" class="illustration-svg">
-                            <!-- Brain/neural network -->
-                            <circle cx="100" cy="70" r="20" fill="none" stroke="#1A1F3A" stroke-width="2"/>
-                            <circle cx="70" cy="50" r="12" fill="#FFC107" opacity="0.7"/>
-                            <circle cx="130" cy="50" r="12" fill="#FFC107" opacity="0.7"/>
-                            <line x1="82" y1="58" x2="90" y2="65" stroke="#1A1F3A" stroke-width="2"/>
-                            <line x1="118" y1="65" x2="110" y2="58" stroke="#1A1F3A" stroke-width="2"/>
-                        </svg>
-                    </div>
+                    <p>Flask-based dashboard for real-time monitoring, event logging, and data visualization. Clean interface that looks great even at 20% brightness.</p>
                 </div>
             </div>
         </div>
@@ -216,7 +130,7 @@
                 <div class="step">
                     <div class="step-number">04</div>
                     <h3>Learn & Improve</h3>
-                    <p>Data is stored in Firebase. Over time, the system learns your personal triggers and becomes more accurate at predicting episodes.</p>
+                    <p>Data is stored locally and analyzed in real-time. Over time, the system learns your personal triggers and becomes more accurate at predicting episodes.</p>
                 </div>
             </div>
         </div>
@@ -300,30 +214,6 @@
                         <strong>2</strong>
                     </div>
                 </div>
-                <div class="dashboard-card environment">
-                    <h3>Environment</h3>
-                    <div class="env-metric">
-                        <span>💡 Ambient Light</span>
-                        <strong>45%</strong>
-                    </div>
-                    <div class="env-metric">
-                        <span>🌡️ Temperature</span>
-                        <strong>22°C</strong>
-                    </div>
-                    <div class="env-metric">
-                        <span>💧 Humidity</span>
-                        <strong>65%</strong>
-                    </div>
-                </div>
-                <div class="dashboard-card recommendations">
-                    <h3>Recommendations</h3>
-                    <ul class="recommendations-list">
-                        <li>✅ Environment conditions optimal</li>
-                        <li>⚠️ Stress level elevated - consider break</li>
-                        <li>💡 Lights auto-dimmed at 14:23</li>
-                        <li>📝 Log trigger: Recent caffeine intake?</li>
-                    </ul>
-                </div>
             </div>
             
             <!-- Real-time Graphs Section -->
@@ -392,10 +282,10 @@
                 <div class="card">
                     <h3>Technology Stack</h3>
                     <ul style="list-style: disc; padding-left: 1.5rem; color: var(--text-gray); line-height: 2;">
-                        <li><strong>Flask / React.js</strong> – Dashboard & event logging</li>
+                        <li><strong>Flask</strong> – Dashboard & event logging</li>
                         <li><strong>Python (Muse SDK)</strong> – Real-time EEG processing</li>
                         <li><strong>Arduino (C/C++)</strong> – Light control & sensors</li>
-                        <li><strong>Firebase / Firestore</strong> – Data storage</li>
+                        <li><strong>Machine Learning Models</strong> – Deep learning for prediction</li>
                         <li><strong>Muse 2 Headband</strong> – EEG, HR, motion tracking</li>
                     </ul>
                 </div>
@@ -420,7 +310,6 @@
                 </div>
                 <div class="footer-section">
                     <h4>Project</h4>
-                    <p>NatHax Project</p>
                     <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
                         Built with ❤️ for those who understand the storm
                     </p>
@@ -429,6 +318,45 @@
             <p class="footer-copyright">&copy; 2024 MigraineMinder. All rights reserved.</p>
         </div>
     </footer>
+
+    <!-- Contributors Section -->
+    <section class="contributors-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Team</h2>
+                <p>Undergraduate students building the future of migraine management</p>
+            </div>
+            <div class="contributors-container">
+                <div class="contributors-scroll">
+                    <div class="contributor-card">
+                        <div class="contributor-avatar">A</div>
+                        <div class="contributor-name">Aahil</div>
+                        <div class="contributor-role">Undergraduate Student</div>
+                    </div>
+                    <div class="contributor-card">
+                        <div class="contributor-avatar">S</div>
+                        <div class="contributor-name">Sanika</div>
+                        <div class="contributor-role">Undergraduate Student</div>
+                    </div>
+                    <div class="contributor-card">
+                        <div class="contributor-avatar">A</div>
+                        <div class="contributor-name">Animesh</div>
+                        <div class="contributor-role">Undergraduate Student</div>
+                    </div>
+                    <div class="contributor-card">
+                        <div class="contributor-avatar">S</div>
+                        <div class="contributor-name">Swayam</div>
+                        <div class="contributor-role">Undergraduate Student</div>
+                    </div>
+                    <div class="contributor-card">
+                        <div class="contributor-avatar">P</div>
+                        <div class="contributor-name">Pavan</div>
+                        <div class="contributor-role">Undergraduate Student</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Chart.js for graphs -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>

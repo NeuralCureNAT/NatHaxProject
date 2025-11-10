@@ -1,0 +1,143 @@
+/* ============================================
+   Contributors Section Styles
+   ============================================ */
+
+.contributors-section {
+    background: var(--bg-light-beige);
+    padding: var(--spacing-2xl) var(--spacing-lg);
+    border-top: 2px solid rgba(26, 31, 58, 0.1);
+}
+
+.contributors-container {
+    margin-top: var(--spacing-xl);
+    overflow: hidden;
+    position: relative;
+}
+
+.contributors-scroll {
+    display: flex;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-md) 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-yellow) var(--bg-light-beige);
+    -webkit-overflow-scrolling: touch;
+}
+
+.contributors-scroll::-webkit-scrollbar {
+    height: 8px;
+}
+
+.contributors-scroll::-webkit-scrollbar-track {
+    background: var(--bg-light-beige);
+    border-radius: var(--radius-full);
+}
+
+.contributors-scroll::-webkit-scrollbar-thumb {
+    background: var(--accent-yellow);
+    border-radius: var(--radius-full);
+}
+
+.contributors-scroll::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-gold);
+}
+
+.contributor-card {
+    min-width: 200px;
+    background: var(--bg-cream);
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    border: 2px solid rgba(26, 31, 58, 0.1);
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+.contributor-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 193, 7, 0.1) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.contributor-card:hover::before {
+    opacity: 1;
+}
+
+.contributor-card:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--accent-yellow);
+}
+
+.contributor-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin: 0 auto var(--spacing-md);
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    z-index: 1;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.contributor-card:hover .contributor-avatar {
+    transform: rotate(360deg) scale(1.1);
+    box-shadow: 0 0 30px rgba(255, 193, 7, 0.5);
+}
+
+.contributor-name {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+    margin-bottom: var(--spacing-xs);
+    position: relative;
+    z-index: 1;
+}
+
+.contributor-role {
+    font-size: 0.9rem;
+    color: var(--text-gray);
+    font-weight: 500;
+    position: relative;
+    z-index: 1;
+}
+
+/* Animation for cards appearing */
+@keyframes slideInFromRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.contributor-card {
+    animation: slideInFromRight 0.6s ease-out both;
+}
+
+.contributor-card:nth-child(1) { animation-delay: 0.1s; }
+.contributor-card:nth-child(2) { animation-delay: 0.2s; }
+.contributor-card:nth-child(3) { animation-delay: 0.3s; }
+.contributor-card:nth-child(4) { animation-delay: 0.4s; }
+.contributor-card:nth-child(5) { animation-delay: 0.5s; }
+

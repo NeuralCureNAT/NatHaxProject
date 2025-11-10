@@ -207,7 +207,7 @@ this.baseURL = 'http://your-flask-backend:5000/api';
 
 ## 📄 License
 
-Part of NatHax Project - EdTech Innovation
+Built by undergraduate students for migraine management
 
 ---
 

@@ -20,10 +20,10 @@ MigraineMinder aims to restore that balance — one photon at a time.
 ## ⚙️ Software & Hardware Used  
 
 ### 🧩 Software Stack  
-- **Flask / React.js** – for the dashboard and migraine event logging  
+- **Flask** – for the dashboard and migraine event logging  
 - **Python (Muse SDK)** – for real-time EEG signal acquisition and anomaly detection  
 - **Arduino (C / C++)** – to control LED brightness and communicate with sensors  
-- **Firebase / Firestore** – for data storage and user history  
+- **Machine Learning Models** – Deep learning for migraine prediction  
 - **CSS / JS** – for the interactive migraine diary interface  
 
 ### 🔧 Hardware Components  

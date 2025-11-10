@@ -476,7 +476,7 @@ def set_light():
 
 @app.post("/api/user/profile")
 def user_profile():
-    # Accept onboarding profile; you can persist later (Firestore/SQLite)
+    # Accept onboarding profile; you can persist later (SQLite/database)
     body = request.get_json(silent=True) or {}
     # TODO: save to DB if desired
     return jsonify(success=True, received=body)

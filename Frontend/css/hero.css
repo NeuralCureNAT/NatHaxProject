@@ -35,6 +35,35 @@
     text-align: center;
 }
 
+.hero-quote {
+    margin-bottom: var(--spacing-xl);
+    padding: var(--spacing-lg);
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-lg);
+    border-left: 4px solid var(--accent-yellow);
+    box-shadow: var(--shadow-md);
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.hero-quote blockquote {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    font-style: italic;
+    color: var(--text-dark);
+    margin: 0 0 var(--spacing-sm) 0;
+    line-height: 1.6;
+    font-weight: 500;
+}
+
+.hero-quote cite {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text-gray);
+    font-style: normal;
+    text-align: right;
+    margin-top: var(--spacing-xs);
+}
+
 .hero-badge {
     display: inline-block;
     background: rgba(26, 31, 58, 0.08);
@@ -46,6 +75,7 @@
     margin-bottom: var(--spacing-lg);
     border: 1px solid rgba(26, 31, 58, 0.15);
     color: var(--text-dark);
+    animation: fadeInUp 1s ease-out 0.2s both;
 }
 
 .hero-content h1 {
@@ -54,6 +84,7 @@
     line-height: 1.1;
     margin-bottom: var(--spacing-md);
     color: var(--text-dark);
+    animation: fadeInUp 1s ease-out 0.4s both;
 }
 
 .hero-accent {
@@ -67,6 +98,7 @@
     opacity: 0.95;
     line-height: 1.7;
     color: var(--text-gray);
+    animation: fadeInUp 1s ease-out 0.6s both;
 }
 
 .hero-buttons {
@@ -106,5 +138,16 @@
     color: var(--text-gray);
     text-transform: uppercase;
     letter-spacing: 1px;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
