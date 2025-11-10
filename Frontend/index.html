@@ -329,33 +329,44 @@
             <!-- Real-time Graphs Section -->
             <div class="graphs-section">
                 <div class="section-header">
-                    <h2>Real-Time Monitoring Graphs</h2>
-                    <p>Live visualization of all physiological and EEG metrics</p>
+                    <h2>Real-Time Monitoring</h2>
+                    <p>Live visualization of EEG metrics and physiological data</p>
                 </div>
                 <div class="graphs-grid">
                     <div class="graph-card">
-                        <h3>EEG Frequency Bands</h3>
+                        <h3>EEG Frequency Bands Over Time</h3>
                         <canvas id="eegGraph"></canvas>
                     </div>
-                    <div class="graph-card">
-                        <h3>Heart Rate</h3>
-                        <canvas id="heartRateGraph"></canvas>
-                    </div>
-                    <div class="graph-card">
-                        <h3>Breathing Rate</h3>
-                        <canvas id="breathingGraph"></canvas>
-                    </div>
-                    <div class="graph-card">
-                        <h3>Head Tilt (Pitch)</h3>
-                        <canvas id="headTiltGraph"></canvas>
-                    </div>
-                    <div class="graph-card">
-                        <h3>Migraine Severity Over Time</h3>
-                        <canvas id="severityGraph"></canvas>
-                    </div>
-                    <div class="graph-card">
-                        <h3>Stress & Arousal Index</h3>
-                        <canvas id="stressGraph"></canvas>
+                    <div class="dashboard-card metrics-display">
+                        <h3>Physiological Metrics</h3>
+                        <div class="metrics-grid">
+                            <div class="metric-item">
+                                <div class="metric-label">Heart Rate</div>
+                                <div class="metric-value" id="heart-rate-display">--</div>
+                                <div class="metric-unit">BPM</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-label">Breathing Rate</div>
+                                <div class="metric-value" id="breathing-rate-display">--</div>
+                                <div class="metric-unit">per min</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-label">Head Tilt (Pitch)</div>
+                                <div class="metric-value" id="head-pitch-display">--</div>
+                                <div class="metric-unit">degrees</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-label">Head Roll</div>
+                                <div class="metric-value" id="head-roll-display">--</div>
+                                <div class="metric-unit">degrees</div>
+                            </div>
+                        </div>
+                        <div class="metrics-history">
+                            <h4>Recent Values</h4>
+                            <div class="history-list" id="metrics-history-list">
+                                <p class="no-data-text">No data recorded yet</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

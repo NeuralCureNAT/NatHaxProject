@@ -403,3 +403,101 @@
     height: 300px !important;
 }
 
+/* Metrics Display Card */
+.metrics-display {
+    grid-column: span 1;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.metric-item {
+    background: var(--bg-light-beige);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(26, 31, 58, 0.1);
+    text-align: center;
+    transition: var(--transition-base);
+}
+
+.metric-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--accent-yellow);
+}
+
+.metric-label {
+    font-size: 0.85rem;
+    color: var(--text-gray);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: var(--spacing-xs);
+}
+
+.metric-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--primary-dark);
+    font-family: var(--font-mono);
+    margin-bottom: var(--spacing-xs);
+    line-height: 1.2;
+}
+
+.metric-unit {
+    font-size: 0.75rem;
+    color: var(--text-light);
+    text-transform: uppercase;
+}
+
+.metrics-history {
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid rgba(26, 31, 58, 0.1);
+}
+
+.metrics-history h4 {
+    font-size: 1rem;
+    color: var(--primary-dark);
+    margin-bottom: var(--spacing-sm);
+    font-weight: 700;
+}
+
+.history-list {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
+    background: var(--bg-light-beige);
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+}
+
+.history-time {
+    color: var(--text-gray);
+    font-weight: 600;
+    font-family: var(--font-mono);
+}
+
+.history-values {
+    color: var(--text-dark);
+    font-family: var(--font-mono);
+}
+
+.no-data-text {
+    text-align: center;
+    color: var(--text-light);
+    font-style: italic;
+    padding: var(--spacing-md);
+}
+

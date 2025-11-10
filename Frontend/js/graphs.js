@@ -15,10 +15,7 @@ class RealTimeGraphs {
             gamma: [],
             heartRate: [],
             breathingRate: [],
-            headPitch: [],
-            severity: [],
-            stressIndex: [],
-            arousalIndex: []
+            headPitch: []
         };
         
         this.charts = {};
@@ -27,11 +24,6 @@ class RealTimeGraphs {
 
     init() {
         this.setupEEGGraph();
-        this.setupHeartRateGraph();
-        this.setupBreathingGraph();
-        this.setupHeadTiltGraph();
-        this.setupSeverityGraph();
-        this.setupStressGraph();
     }
 
     setupEEGGraph() {
@@ -117,295 +109,6 @@ class RealTimeGraphs {
         });
     }
 
-    setupHeartRateGraph() {
-        const ctx = document.getElementById('heartRateGraph');
-        if (!ctx) return;
-
-        this.charts.heartRate = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: 'Heart Rate (BPM)',
-                    data: [],
-                    borderColor: '#E53E3E',
-                    backgroundColor: 'rgba(229, 62, 62, 0.1)',
-                    tension: 0.4,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    x: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: 'Time'
-                        }
-                    },
-                    y: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: 'BPM'
-                        },
-                        beginAtZero: false,
-                        suggestedMin: 50,
-                        suggestedMax: 120
-                    }
-                },
-                animation: {
-                    duration: 0
-                }
-            }
-        });
-    }
-
-    setupBreathingGraph() {
-        const ctx = document.getElementById('breathingGraph');
-        if (!ctx) return;
-
-        this.charts.breathing = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: 'Breathing Rate (per min)',
-                    data: [],
-                    borderColor: '#3182CE',
-                    backgroundColor: 'rgba(49, 130, 206, 0.1)',
-                    tension: 0.4,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    x: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: 'Time'
-                        }
-                    },
-                    y: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: 'Breaths/min'
-                        },
-                        beginAtZero: false,
-                        suggestedMin: 10,
-                        suggestedMax: 25
-                    }
-                },
-                animation: {
-                    duration: 0
-                }
-            }
-        });
-    }
-
-    setupHeadTiltGraph() {
-        const ctx = document.getElementById('headTiltGraph');
-        if (!ctx) return;
-
-        this.charts.headTilt = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: 'Head Pitch (degrees)',
-                    data: [],
-                    borderColor: '#38A169',
-                    backgroundColor: 'rgba(56, 161, 105, 0.1)',
-                    tension: 0.4,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    x: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: 'Time'
-                        }
-                    },
-                    y: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: 'Degrees'
-                        },
-                        beginAtZero: false,
-                        suggestedMin: -30,
-                        suggestedMax: 30
-                    }
-                },
-                animation: {
-                    duration: 0
-                }
-            }
-        });
-    }
-
-    setupSeverityGraph() {
-        const ctx = document.getElementById('severityGraph');
-        if (!ctx) return;
-
-        this.charts.severity = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: 'Migraine Severity',
-                    data: [],
-                    borderColor: '#FFC107',
-                    backgroundColor: 'rgba(255, 193, 7, 0.1)',
-                    tension: 0.4,
-                    fill: true,
-                    borderWidth: 3
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    annotation: {
-                        annotations: {
-                            lowThreshold: {
-                                type: 'line',
-                                yMin: 0.25,
-                                yMax: 0.25,
-                                borderColor: '#38A169',
-                                borderWidth: 2,
-                                borderDash: [5, 5],
-                                label: {
-                                    content: 'Low Risk',
-                                    enabled: true
-                                }
-                            },
-                            mediumThreshold: {
-                                type: 'line',
-                                yMin: 0.75,
-                                yMax: 0.75,
-                                borderColor: '#FFC107',
-                                borderWidth: 2,
-                                borderDash: [5, 5],
-                                label: {
-                                    content: 'Medium Risk',
-                                    enabled: true
-                                }
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: 'Time'
-                        }
-                    },
-                    y: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: 'Severity (0.0 - 1.0)'
-                        },
-                        min: 0,
-                        max: 1
-                    }
-                },
-                animation: {
-                    duration: 0
-                }
-            }
-        });
-    }
-
-    setupStressGraph() {
-        const ctx = document.getElementById('stressGraph');
-        if (!ctx) return;
-
-        this.charts.stress = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [
-                    {
-                        label: 'Stress Index',
-                        data: [],
-                        borderColor: '#E53E3E',
-                        backgroundColor: 'rgba(229, 62, 62, 0.1)',
-                        tension: 0.4
-                    },
-                    {
-                        label: 'Arousal Index',
-                        data: [],
-                        borderColor: '#FFC107',
-                        backgroundColor: 'rgba(255, 193, 7, 0.1)',
-                        tension: 0.4
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top'
-                    }
-                },
-                scales: {
-                    x: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: 'Time'
-                        }
-                    },
-                    y: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: 'Index Value'
-                        },
-                        beginAtZero: true
-                    }
-                },
-                animation: {
-                    duration: 0
-                }
-            }
-        });
-    }
 
     addDataPoint(data) {
         if (!data || !data.connected) {
@@ -424,9 +127,9 @@ class RealTimeGraphs {
         this.dataHistory.heartRate.push(data.heart_rate_bpm || 0);
         this.dataHistory.breathingRate.push(data.breathing_rate_bpm || 0);
         this.dataHistory.headPitch.push(data.head_pitch || 0);
-        this.dataHistory.severity.push(data.migraine_severity || 0);
-        this.dataHistory.stressIndex.push(data.stress_index || 0);
-        this.dataHistory.arousalIndex.push(data.arousal_index || 0);
+        
+        // Update numerical displays
+        this.updateNumericalDisplays(data);
 
         // Limit history size
         if (this.dataHistory.timestamps.length > this.maxDataPoints) {
@@ -439,9 +142,6 @@ class RealTimeGraphs {
             this.dataHistory.heartRate.shift();
             this.dataHistory.breathingRate.shift();
             this.dataHistory.headPitch.shift();
-            this.dataHistory.severity.shift();
-            this.dataHistory.stressIndex.shift();
-            this.dataHistory.arousalIndex.shift();
         }
 
         // Update all charts
@@ -461,42 +161,80 @@ class RealTimeGraphs {
             this.charts.eeg.data.datasets[4].data = this.dataHistory.gamma;
             this.charts.eeg.update('none');
         }
+    }
 
-        // Update Heart Rate graph
-        if (this.charts.heartRate) {
-            this.charts.heartRate.data.labels = labels;
-            this.charts.heartRate.data.datasets[0].data = this.dataHistory.heartRate;
-            this.charts.heartRate.update('none');
+    updateNumericalDisplays(data) {
+        // Update current values
+        const heartRateEl = document.getElementById('heart-rate-display');
+        if (heartRateEl) {
+            if (data.heart_rate_bpm && data.heart_rate_bpm > 0) {
+                heartRateEl.textContent = Math.round(data.heart_rate_bpm);
+            } else {
+                heartRateEl.textContent = '--';
+            }
         }
 
-        // Update Breathing graph
-        if (this.charts.breathing) {
-            this.charts.breathing.data.labels = labels;
-            this.charts.breathing.data.datasets[0].data = this.dataHistory.breathingRate;
-            this.charts.breathing.update('none');
+        const breathingRateEl = document.getElementById('breathing-rate-display');
+        if (breathingRateEl) {
+            if (data.breathing_rate_bpm && data.breathing_rate_bpm > 0) {
+                breathingRateEl.textContent = data.breathing_rate_bpm.toFixed(1);
+            } else {
+                breathingRateEl.textContent = '--';
+            }
         }
 
-        // Update Head Tilt graph
-        if (this.charts.headTilt) {
-            this.charts.headTilt.data.labels = labels;
-            this.charts.headTilt.data.datasets[0].data = this.dataHistory.headPitch;
-            this.charts.headTilt.update('none');
+        const headPitchEl = document.getElementById('head-pitch-display');
+        if (headPitchEl) {
+            if (data.head_pitch !== null && data.head_pitch !== undefined) {
+                headPitchEl.textContent = data.head_pitch.toFixed(1);
+            } else {
+                headPitchEl.textContent = '--';
+            }
         }
 
-        // Update Severity graph
-        if (this.charts.severity) {
-            this.charts.severity.data.labels = labels;
-            this.charts.severity.data.datasets[0].data = this.dataHistory.severity;
-            this.charts.severity.update('none');
+        const headRollEl = document.getElementById('head-roll-display');
+        if (headRollEl) {
+            if (data.head_roll !== null && data.head_roll !== undefined) {
+                headRollEl.textContent = data.head_roll.toFixed(1);
+            } else {
+                headRollEl.textContent = '--';
+            }
         }
 
-        // Update Stress graph
-        if (this.charts.stress) {
-            this.charts.stress.data.labels = labels;
-            this.charts.stress.data.datasets[0].data = this.dataHistory.stressIndex;
-            this.charts.stress.data.datasets[1].data = this.dataHistory.arousalIndex;
-            this.charts.stress.update('none');
+        // Update history list (show last 10 values)
+        this.updateHistoryList(data);
+    }
+
+    updateHistoryList(data) {
+        const historyList = document.getElementById('metrics-history-list');
+        if (!historyList) return;
+
+        // Get last 10 entries
+        const recentCount = Math.min(10, this.dataHistory.timestamps.length);
+        if (recentCount === 0) {
+            historyList.innerHTML = '<p class="no-data-text">No data recorded yet</p>';
+            return;
         }
+
+        // Build history HTML
+        let historyHTML = '';
+        for (let i = this.dataHistory.timestamps.length - recentCount; i < this.dataHistory.timestamps.length; i++) {
+            const timestamp = this.dataHistory.timestamps[i];
+            const hr = this.dataHistory.heartRate[i] > 0 ? Math.round(this.dataHistory.heartRate[i]) : '--';
+            const br = this.dataHistory.breathingRate[i] > 0 ? this.dataHistory.breathingRate[i].toFixed(1) : '--';
+            const pitch = this.dataHistory.headPitch[i] !== 0 ? this.dataHistory.headPitch[i].toFixed(1) : '--';
+            
+            historyHTML += `
+                <div class="history-item">
+                    <span class="history-time">${timestamp}</span>
+                    <span class="history-values">
+                        HR: ${hr} | BR: ${br} | Pitch: ${pitch}°
+                    </span>
+                </div>
+            `;
+        }
+
+        historyList.innerHTML = historyHTML;
     }
 }
 

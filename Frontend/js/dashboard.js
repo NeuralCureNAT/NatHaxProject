@@ -205,7 +205,7 @@ class Dashboard {
                 const prediction = await window.API.getPrediction();
                 this.updateMigrainePrediction(prediction);
                 
-                // Update real-time graphs
+                // Update real-time graphs and numerical displays
                 if (window.realTimeGraphs) {
                     // Combine eegData and prediction for graphs
                     const graphData = {
@@ -213,6 +213,9 @@ class Dashboard {
                         ...prediction
                     };
                     window.realTimeGraphs.addDataPoint(graphData);
+                } else {
+                    // Fallback: update numerical displays directly if graphs not initialized
+                    this.updatePhysiologicalMetrics(eegData);
                 }
             } else {
                 // Show "No Data" state
@@ -224,6 +227,13 @@ class Dashboard {
                     migraine_stage: null,
                     migraine_interpretation: 'Connect Muse 2 to see predictions',
                     migraine_risk_level: null
+                });
+                // Clear physiological metrics
+                this.updatePhysiologicalMetrics({
+                    heart_rate_bpm: null,
+                    breathing_rate_bpm: null,
+                    head_pitch: null,
+                    head_roll: null
                 });
             }
             
@@ -338,6 +348,48 @@ class Dashboard {
         const humidityEl = document.querySelector('.env-metric:nth-child(3) strong');
         if (humidityEl && envData.humidity !== undefined) {
             humidityEl.textContent = `${envData.humidity}%`;
+        }
+    }
+
+    updatePhysiologicalMetrics(data) {
+        // Update heart rate display
+        const heartRateEl = document.getElementById('heart-rate-display');
+        if (heartRateEl) {
+            if (data.heart_rate_bpm && data.heart_rate_bpm > 0) {
+                heartRateEl.textContent = Math.round(data.heart_rate_bpm);
+            } else {
+                heartRateEl.textContent = '--';
+            }
+        }
+
+        // Update breathing rate display
+        const breathingRateEl = document.getElementById('breathing-rate-display');
+        if (breathingRateEl) {
+            if (data.breathing_rate_bpm && data.breathing_rate_bpm > 0) {
+                breathingRateEl.textContent = data.breathing_rate_bpm.toFixed(1);
+            } else {
+                breathingRateEl.textContent = '--';
+            }
+        }
+
+        // Update head pitch display
+        const headPitchEl = document.getElementById('head-pitch-display');
+        if (headPitchEl) {
+            if (data.head_pitch !== null && data.head_pitch !== undefined) {
+                headPitchEl.textContent = data.head_pitch.toFixed(1);
+            } else {
+                headPitchEl.textContent = '--';
+            }
+        }
+
+        // Update head roll display
+        const headRollEl = document.getElementById('head-roll-display');
+        if (headRollEl) {
+            if (data.head_roll !== null && data.head_roll !== undefined) {
+                headRollEl.textContent = data.head_roll.toFixed(1);
+            } else {
+                headRollEl.textContent = '--';
+            }
         }
     }
 }
