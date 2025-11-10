@@ -9,12 +9,13 @@ import time
 import numpy as np
 import pandas as pd
 from datetime import datetime
-import threading
-import json
 import queue
 import sys
 import platform
 from collections import deque
+from pathlib import Path
+import csv
+
 
 try:
     from pylsl import StreamInlet, resolve_byprop, StreamInfo
@@ -27,6 +28,8 @@ try:
         class LostError(RuntimeError):
             """Stream connection lost error"""
             pass
+
+
 except ImportError as e:
     LSL_AVAILABLE = False
     print(f"ERROR: pylsl is not installed or error importing: {e}")
@@ -233,7 +236,7 @@ class VisualizationDashboard:
         plt.tight_layout()
         
     def update_metrics(self, heart_rate=None, head_pitch=None, breathing_rate=None):
-        """Update metric values"""
+        """Update metric values shown in the metric boxes."""
         if heart_rate is not None:
             self.heart_rate = heart_rate
         if head_pitch is not None:
@@ -328,7 +331,7 @@ class VisualizationDashboard:
         self.ax_hr.text(0.5, 0.7, 'HEART RATE', ha='center', va='center',
                        fontsize=12, fontweight='bold', color='#FF6B6B',
                        transform=self.ax_hr.transAxes)
-        hr_value = f"{self.heart_rate:.0f}" if self.heart_rate else "---"
+        hr_value = f"{self.heart_rate:.0f}" if self.heart_rate is not None else "---"
         self.hr_text = self.ax_hr.text(0.5, 0.35, f"{hr_value}\nBPM", ha='center', va='center',
                                       fontsize=24, fontweight='bold', color='#ffffff',
                                       transform=self.ax_hr.transAxes)
@@ -370,7 +373,7 @@ class VisualizationDashboard:
         self.ax_breath.text(0.5, 0.7, 'BREATHING RATE', ha='center', va='center',
                            fontsize=12, fontweight='bold', color='#95E1D3',
                            transform=self.ax_breath.transAxes)
-        breath_value = f"{self.breathing_rate:.1f}" if self.breathing_rate else "---"
+        breath_value = f"{self.breathing_rate:.1f}" if self.breathing_rate is not None else "---"
         self.breath_text = self.ax_breath.text(0.5, 0.35, f"{breath_value}\n/min", ha='center', va='center',
                                               fontsize=24, fontweight='bold', color='#ffffff',
                                               transform=self.ax_breath.transAxes)
@@ -668,27 +671,14 @@ class Muse2Tracker:
         except:
             return None
     
-    def calculate_posture(self, acc_data):
-        """Calculate posture from accelerometer data"""
-        if len(acc_data) < 3:
+    def calculate_posture(self, acc_sample):
+        if acc_sample is None or len(acc_sample) < 3:
             return None
-        
-        # Calculate pitch and roll from accelerometer
-        # Assuming acc_data is [x, y, z]
-        try:
-            x, y, z = acc_data[-1] if isinstance(acc_data[0], (list, np.ndarray)) else (acc_data[0], acc_data[1], acc_data[2])
-            
-            # Calculate pitch and roll
-            pitch = np.arctan2(-x, np.sqrt(y**2 + z**2)) * 180 / np.pi
-            roll = np.arctan2(y, z) * 180 / np.pi
-            
-            return {
-                'pitch': pitch,
-                'roll': roll,
-                'head_movement': np.sqrt(x**2 + y**2 + z**2)
-            }
-        except:
-            return None
+        x, y, z = acc_sample[:3]
+        pitch = np.degrees(np.arctan2(-x, np.sqrt(y*y + z*z)))
+        roll  = np.degrees(np.arctan2(y, z))
+        return {'pitch': pitch, 'roll': roll, 'head_movement': np.sqrt(x*x + y*y + z*z)}
+
     
     def estimate_breathing_rate(self, breath_data, sampling_rate):
         """Estimate breathing rate from breath data with noise reduction"""
@@ -942,60 +932,72 @@ class Muse2Tracker:
                             last_save_time = current_time
                             
                             # Update visualization dashboard
-                            if self.enable_visualization and self.dashboard:
-                                try:
-                                    # Calculate average power for each band across all channels
-                                    eeg_bands = processed.get('eeg_bands', {})
-                                    delta_powers = [eeg_bands.get(f'{ch}_delta', 0) for ch in EEG_CHANNELS]
-                                    theta_powers = [eeg_bands.get(f'{ch}_theta', 0) for ch in EEG_CHANNELS]
-                                    alpha_powers = [eeg_bands.get(f'{ch}_alpha', 0) for ch in EEG_CHANNELS]
-                                    beta_powers = [eeg_bands.get(f'{ch}_beta', 0) for ch in EEG_CHANNELS]
-                                    gamma_powers = [eeg_bands.get(f'{ch}_gamma', 0) for ch in EEG_CHANNELS]
-                                    
-                                    delta_avg = np.mean(delta_powers) if delta_powers else 0.0
-                                    theta_avg = np.mean(theta_powers) if theta_powers else 0.0
-                                    alpha_avg = np.mean(alpha_powers) if alpha_powers else 0.0
-                                    beta_avg = np.mean(beta_powers) if beta_powers else 0.0
-                                    gamma_avg = np.mean(gamma_powers) if gamma_powers else 0.0
-                                    
-                                    try:
-                                        eeg_avg = {
-                                            'delta': float(delta_avg or 0.0),
-                                            'theta': float(theta_avg or 0.0),
-                                            'alpha': float(alpha_avg or 0.0),
-                                            'beta':  float(beta_avg  or 0.0),
-                                            'gamma': float(gamma_avg or 0.0),
-                                        }
-                                        metrics = compute_focus_metrics(eeg_avg)
-                                        latest = {
-                                            **metrics,
-                                            "timestamp": datetime.utcnow().isoformat() + "Z"
-                                        }
-                                        # Write in the working directory where you run the tracker.
-                                        # If you run it from project root, app.py will still find it.
-                                        with open("latest.json", "w") as f:
-                                            json.dump(latest, f)
-                                    except Exception as e:
-                                        pass
+                        if self.enable_visualization and self.dashboard:
+                            try:
+                                # Calculate average power for each band across all channels
+                                eeg_bands = processed.get('eeg_bands', {})
+                                delta_powers = [eeg_bands.get(f'{ch}_delta', 0) for ch in EEG_CHANNELS]
+                                theta_powers = [eeg_bands.get(f'{ch}_theta', 0) for ch in EEG_CHANNELS]
+                                alpha_powers = [eeg_bands.get(f'{ch}_alpha', 0) for ch in EEG_CHANNELS]
+                                beta_powers  = [eeg_bands.get(f'{ch}_beta',  0) for ch in EEG_CHANNELS]
+                                gamma_powers = [eeg_bands.get(f'{ch}_gamma', 0) for ch in EEG_CHANNELS]
 
-                                    # Update dashboard
-                                    self.dashboard.update_data(delta_avg, theta_avg, alpha_avg, beta_avg, gamma_avg)
-                                    self.dashboard.update_metrics(
-                                        heart_rate=processed.get('heart_rate'),
-                                        head_pitch=processed.get('posture', {}).get('pitch') if processed.get('posture') else None,
-                                        breathing_rate=processed.get('breathing_rate')
-                                    )
-                                    
-                                    # Process GUI events (non-blocking)
-                                    if hasattr(self.dashboard, 'fig') and plt.fignum_exists(self.dashboard.fig.number):
-                                        try:
-                                            plt.pause(0.001)  # Process events without blocking
-                                        except:
-                                            # Window might be closed
-                                            self.enable_visualization = False
-                                except Exception as e:
-                                    # Don't let visualization errors stop data collection
-                                    pass
+                                delta_avg = np.mean(delta_powers) if delta_powers else 0.0
+                                theta_avg = np.mean(theta_powers) if theta_powers else 0.0
+                                alpha_avg = np.mean(alpha_powers) if alpha_powers else 0.0
+                                beta_avg  = np.mean(beta_powers)  if beta_powers  else 0.0
+                                gamma_avg = np.mean(gamma_powers) if gamma_powers else 0.0
+
+                                # Compute focus metrics and append rolling CSV
+                                eeg_avg = {
+                                    'delta': float(delta_avg or 0.0),
+                                    'theta': float(theta_avg or 0.0),
+                                    'alpha': float(alpha_avg or 0.0),
+                                    'beta':  float(beta_avg  or 0.0),
+                                    'gamma': float(gamma_avg or 0.0),
+                                }
+                                metrics = compute_focus_metrics(eeg_avg)
+                                latest = {**metrics, "timestamp": datetime.utcnow().isoformat() + "Z"}
+
+                                Path("data").mkdir(exist_ok=True)
+                                csv_path = Path("data/muse2_data_processed_latest.csv")
+                                header = ["timestamp","delta","theta","alpha","beta","gamma",
+                                        "heart_rate_bpm","breathing_rate_bpm","head_pitch","head_roll","head_movement"]
+                                row = [
+                                    datetime.utcnow().isoformat()+"Z",
+                                    float(delta_avg or 0.0), float(theta_avg or 0.0), float(alpha_avg or 0.0),
+                                    float(beta_avg or 0.0), float(gamma_avg or 0.0),
+                                    processed.get("heart_rate") if processed.get("heart_rate") is not None else "",
+                                    processed.get("breathing_rate") if processed.get("breathing_rate") is not None else "",
+                                    processed.get("posture",{}).get("pitch","") if processed.get("posture") else "",
+                                    processed.get("posture",{}).get("roll","")  if processed.get("posture") else "",
+                                    processed.get("posture",{}).get("head_movement","") if processed.get("posture") else "",
+                                ]
+                                new_file = not csv_path.exists()
+                                with csv_path.open("a", newline="") as f:
+                                    w = csv.writer(f)
+                                    if new_file:
+                                        w.writerow(header)
+                                    w.writerow(row)
+
+                                # Update dashboard
+                                self.dashboard.update_data(delta_avg, theta_avg, alpha_avg, beta_avg, gamma_avg)
+                                self.dashboard.update_metrics(
+                                    heart_rate=processed.get('heart_rate'),
+                                    head_pitch=processed.get('posture', {}).get('pitch') if processed.get('posture') else None,
+                                    breathing_rate=processed.get('breathing_rate')
+                                )
+
+                                # Process GUI events (non-blocking)
+                                if hasattr(self.dashboard, 'fig') and plt.fignum_exists(self.dashboard.fig.number):
+                                    try:
+                                        plt.pause(0.001)
+                                    except Exception:
+                                        self.enable_visualization = False
+                            except Exception as e:
+                                # Don't let visualization errors stop data collection
+                                pass
+
                             
                             # Print status (optional, can be disabled if using visualization)
                             if processed.get('heart_rate'):
